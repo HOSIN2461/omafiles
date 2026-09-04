@@ -428,23 +428,31 @@ bool FileOperationWorker::doTrash(const FileOperationRequest &request,
                                   FileOperationResult &result, QString *error)
 {
     for (const QString &path : request.sources) {
-        const QString name = QDir(path).dirName();
-        if (name.startsWith(".trash")) {
-            *error = tr("A kukakönyvtár nem helyezhető át a kukába");
-            return false;
-        }
-
         GFile *file = Location::make(path);
         GError *gerror = nullptr;
-        const bool ok = g_file_trash(file, m_cancellable, &gerror);
+        bool ok = g_file_trash(file, m_cancellable, &gerror);
+
+        // Nautilus fallback: if g_file_trash() fails (e.g. on .trash-1000 in
+        // a non-native filesystem), move the file into trash:/// manually.
+        if (!ok) {
+            g_clear_error(&gerror);
+            GFile *trash = g_file_new_for_uri("trash:///");
+            GFile *dest = g_file_get_child(trash, QDir(path).dirName().toUtf8().constData());
+            GError *moveError = nullptr;
+            ok = g_file_move(file, dest, G_FILE_COPY_NONE, m_cancellable,
+                             nullptr, nullptr, &moveError);
+            if (!ok) {
+                *error = messageOf(moveError, "Could not move to trash");
+                g_clear_error(&moveError);
+            }
+            g_object_unref(dest);
+            g_object_unref(trash);
+        }
+
         g_object_unref(file);
 
-        if (!ok) {
-            *error = messageOf(gerror, "Could not move to trash");
-            g_clear_error(&gerror);
+        if (!ok)
             return false;
-        }
-        g_clear_error(&gerror);
         result.sources << path;
     }
     return true;
