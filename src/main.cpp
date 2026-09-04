@@ -85,12 +85,13 @@ int main(int argc, char *argv[])
     app.setDesktopFileName(QStringLiteral("omafiles"));
     app.setApplicationVersion(QStringLiteral("0.1.0"));
 
-    // --- Load translation ---
-    QTranslator translator;
-    const QString locale = QLocale::system().name(); // e.g. "hu_HU"
-    if (translator.load(QLatin1String("omafiles_") + locale,
-                        QLatin1String(":/translations"))) {
-        app.installTranslator(&translator);
+    // --- Load translation (pre-compiled Hungarian .qm, embedded via resources) ---
+    if (QLocale::system().language() == QLocale::Hungarian) {
+        QTranslator *translator = new QTranslator(&app);
+        if (translator->load(QStringLiteral(":/translations/translations/omafiles_hu.qm")))
+            app.installTranslator(translator);
+        else
+            delete translator;
     }
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("Browse files."));
