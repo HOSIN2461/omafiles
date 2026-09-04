@@ -2,6 +2,7 @@
 #include "ArchiveEngine.h"
 #include "Location.h"
 
+#include <QDir>
 #include <QElapsedTimer>
 #include <QFileInfo>
 #include <QSet>
@@ -427,6 +428,12 @@ bool FileOperationWorker::doTrash(const FileOperationRequest &request,
                                   FileOperationResult &result, QString *error)
 {
     for (const QString &path : request.sources) {
+        const QString name = QDir(path).dirName();
+        if (name.startsWith(".trash")) {
+            *error = tr("A kukakönyvtár nem helyezhető át a kukába");
+            return false;
+        }
+
         GFile *file = Location::make(path);
         GError *gerror = nullptr;
         const bool ok = g_file_trash(file, m_cancellable, &gerror);
@@ -435,7 +442,6 @@ bool FileOperationWorker::doTrash(const FileOperationRequest &request,
         if (!ok) {
             *error = messageOf(gerror, "Could not move to trash");
             g_clear_error(&gerror);
-            // Report what did make it, so undo can still put those back.
             return false;
         }
         g_clear_error(&gerror);
