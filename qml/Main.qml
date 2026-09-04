@@ -1750,7 +1750,15 @@ Window {
             onTriggered: root.currentTab.activate(root.currentTab.currentIndex)
         }
 
-        MenuSeparator {}
+        MenuItem {
+            text: qsTr("Open in New Tab")
+            enabled: root.currentTab && root.currentTab.selectionCount === 1
+            onTriggered: {
+                const selected = root.currentTab.selectedPaths();
+                if (selected.length === 1 && Platform.isDir(selected[0]))
+                    root.addTab(selected[0]);
+            }
+        }
 
         MenuItem {
             text: qsTr("Open in Terminal")
@@ -1765,16 +1773,6 @@ Window {
             text: qsTr("Open in Root")
             enabled: contextMenu.terminalDir !== ""
             onTriggered: Platform.openTerminalAsRoot(contextMenu.terminalDir)
-        }
-
-        MenuItem {
-            text: qsTr("Open in New Tab")
-            enabled: root.currentTab && root.currentTab.selectionCount === 1
-            onTriggered: {
-                const selected = root.currentTab.selectedPaths();
-                if (selected.length === 1 && Platform.isDir(selected[0]))
-                    root.addTab(selected[0]);
-            }
         }
 
         Menu {
