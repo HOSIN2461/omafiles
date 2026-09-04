@@ -436,7 +436,7 @@ bool FileOperationWorker::doTrash(const FileOperationRequest &request,
         // the FreeDesktop trash). It cannot be moved into trash:/// — the trash
         // backend refuses whole directories. The user asked for a permanent
         // delete, which is exactly what emptying such a trash folder means.
-        if (name.startsWith(".trash")) {
+        if (name.startsWith(QLatin1String(".trash"), Qt::CaseInsensitive)) {
             const bool ok = deleteRecursively(file, error);
             g_object_unref(file);
             if (!ok)
