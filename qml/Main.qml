@@ -511,6 +511,17 @@ Window {
                 }
 
                 ToolbarButton {
+                    // Shown only while the trash is the open view: empties the
+                    // trash for good and refreshes the pane so it reads empty.
+                    visible: root.viewingTrash
+                    implicitWidth: visible ? 32 : 0
+                    glyph: "trash"
+                    tip: qsTr("Empty Trash")
+                    enabled: root.visibleCount > 0
+                    onTriggered: emptyTrashConfirm.open()
+                }
+
+                ToolbarButton {
                     symbol: "✕"
                     symbolSize: 13
                     tip: "Close window (Ctrl+Shift+W)"
@@ -890,6 +901,17 @@ Window {
         onTriggered: root.flashText = ""
     }
 
+    // Delay then reload after emptying the trash, so the pane ends up reading
+    // empty once the worker has finished deleting.
+    Timer {
+        id: emptierStart
+        interval: 800
+        onTriggered: {
+            if (root.currentTab && root.currentTab.path === "trash:///")
+                root.currentTab.reload();
+        }
+    }
+
     // ---- file operations --------------------------------------------------
 
     function selection() { return currentTab ? currentTab.selectedPaths() : []; }
@@ -1142,7 +1164,13 @@ Window {
         message: qsTr("Empty the trash?")
         detail: qsTr("Everything in the trash will be permanently deleted. This cannot be undone.")
         confirmText: qsTr("Empty Trash")
-        onConfirmed: FileOperations.emptyTrash()
+        onConfirmed: {
+            FileOperations.emptyTrash();
+            // The trash is emptied on a worker thread; give GIO a moment to
+            // finish deleting before we re-scan, so the view reads empty.
+            if (root.currentTab && root.currentTab.path === "trash:///")
+                emptierStart.restart();
+        }
     }
 
     ConflictDialog {
