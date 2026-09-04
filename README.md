@@ -1,121 +1,84 @@
-# omanta
+# Omafiles — Magyar fájlkezelő Omarchy-hoz
 
-A native file manager for [Omarchy](https://omarchy.org), built with Qt Quick
-and GIO as a drop-in replacement for GNOME Files (Nautilus) — same
-keybindings, same launch semantics, same D-Bus integration, themed by your
-Omarchy theme.
+Az [Omarchy](https://omarchy.org) natív fájlkezelője, Qt Quick és GIO alapon.
+A GNOME Files (Nautilus) helyettesítője — ugyanazok a billentyűparancsok,
+indítási szemantika és D-Bus integráció, az Omarchy témájával.
 
-![omanta](docs/screenshot.png)
+> **Tesztelési előnézet.** Az omafiles a meglévő fájlkezelő MELLETT települ,
+> és semmit sem módosít, amíg nem váltasz. A mellékelt váltó eszköz
+> segítségével flippingelhetsz a kettő között, és visszaállítja az eredeti
+> állapotot bájtpontosan.
 
-> **Testing preview.** omanta installs *alongside* your existing file manager
-> and touches nothing until you opt in. A bundled switcher flips between the
-> two and restores the stock setup byte-identically. Please file issues for
-> anything that doesn't behave exactly as you'd expect.
+## Amit kapsz
 
-## What you get
+- Lista és rács nézetek, fülek, osztott nézet (F3), fa kibontás,
+  sávok + Ctrl+L, gépelés közbeni keresés, testreszabható oszlopok
+- Minden írási művelet — másolás/kivágás/beillesztés (rendszer vágólap),
+  áthelyezés, átnevezés, csoportos átnevezés, kukába helyezés, törlés —
+  visszavonással/szétvonással és haladás jelzővel
+- Miniatűrok (képek, videó, PDF) a freedesktop spec szerint
+- Oldalsáv: eszközök csatolás/kicsatolás/kiadás hálózattal (`smb://`, `sftp://`),
+  Kuka, Legutóbbi, Kedvencek, könyvjelzők
+- Keresés: rekurzív fájlnév + teljes szöveges (via `localsearch`),
+  dátum és típus szűrők
+- Tömörítés/kibontás (zip, tar.xz, 7z, titkosított zip)
+- Omarchy téma végig — követi az aktív élő témát
+- Egyéni helyi menü műveletek egyszerű TOML fájlokból
+- Többablakos egypéldányos, `org.freedesktop.FileManager1`
 
-- List and grid views, tabs, split view (F3), tree expansion, breadcrumbs +
-  Ctrl+L, type-ahead, configurable columns
-- All write operations — copy/cut/paste (system clipboard, interops with
-  other file managers), move, rename, batch rename, trash, delete — with
-  undo/redo and a progress popover
-- Thumbnails (images, video, PDF) via the freedesktop spec, sharing the
-  system-wide cache
-- Places sidebar: devices with mount/unmount/eject, Network (`smb://`,
-  `sftp://`) with credential prompts, Trash, Recent, Starred, bookmarks
-- Search: recursive filename plus full-text (via `localsearch`), date and
-  type filters
-- Compress/extract (zip, tar.xz, 7z, encrypted zip), "Extract to…"
-- Omarchy theming end to end — follows your active theme live, not just
-  light/dark
-- Custom context-menu actions from simple TOML files — no extension API
-  needed (Omarchy's transcode/LocalSend/Omarchy-Send menu items ship
-  included, plus Dropbox share links if you use Dropbox)
-- Multi-window single instance, `org.freedesktop.FileManager1` — "open
-  containing folder" from browsers and other apps just works
+## Telepítés
 
-## Install
-
-Grab the package from the [latest release](https://github.com/28allday/omanta/releases)
-and install it:
+Töltsd le a csomagot a [legújabb kiadásból](https://github.com/HOSIN2461/omafiles/releases)
+és telepítsd:
 
 ```bash
-curl -LO https://github.com/28allday/omanta/releases/download/v0.1.3/omanta-0.1.3-1-x86_64.pkg.tar.zst
-sudo pacman -U omanta-0.1.3-1-x86_64.pkg.tar.zst
-```
-
-(The package is unsigned, so pacman won't install it straight from a URL —
-download it first and install the local file.)
-
-Or build it yourself:
-
-```bash
-git clone https://github.com/28allday/omanta.git
-cd omanta/packaging
+# Arch Linux
 makepkg -si
 ```
 
-Installing changes none of your defaults — Nautilus (or whatever you use)
-remains the file manager until you switch.
-
-## Switching
+Vagy építsd magad:
 
 ```bash
-omanta-switch omanta     # make omanta the default
-omanta-switch nautilus   # back to stock
-omanta-switch toggle     # flip
-omanta-switch status     # what's active right now
+git clone https://github.com/HOSIN2461/omafiles.git
+cd omafiles/packaging
+makepkg -si
 ```
 
-Or from the desktop: run `omanta-switch install-menu` once and the Omarchy
-Toggle menu (`SUPER+CTRL+O`) gains an **Omanta File Manager** row — select
-it to switch either way. It shows a ✓ while omanta is the default, so the
-menu doubles as a status check. The row appears instantly (no shell
-restart) and `omanta-switch remove-menu` takes it out again.
-
-Switching makes omanta (or Nautilus) the default everywhere at once:
-`SUPER+SHIFT+F`, folders opened from other apps, and double-clicked
-archives. It works by flipping the xdg-mime defaults and writing a
-managed, clearly-marked block to `~/.config/hypr/bindings.lua` —
-Omarchy's own files are never modified, no logout needed, and switching
-back restores your configuration byte-for-byte. One note: whichever file
-manager has windows open keeps the "open containing folder" D-Bus
-service until its last window closes, so close the other one's windows
-after switching.
-
-## Uninstall
+## Váltás
 
 ```bash
-omanta-switch nautilus && omanta-switch remove-menu   # if you switched
-sudo pacman -R omanta
+omafiles-switch omafiles     # omafiles legyen az alapértelmezett
+omafiles-switch nautilus     # vissza a Nautilus-hoz
+omafiles-switch toggle       # váltás
+omafiles-switch status       # mi az alapértelmezett
 ```
 
-## Requirements
+Vagy az asztalról: futtasd az `omafiles-switch install-menu` parancsot egyszer,
+és az Omarchy Toggle menü (`SUPER+CTRL+O`) megjeleníti az **Omafiles Fájlkezelő**
+sort — válaszd a váltáshoz.
 
-Arch with Omarchy. Dependencies (`qt6-base`, `qt6-declarative`, `glib2`,
-`gvfs`, `libarchive`, `tinysparql`) are all in Omarchy's default install or
-pulled automatically. Optional: `gvfs-smb`/`gvfs-mtp`/`gvfs-gphoto2` for
-network shares, phones and cameras, `ffmpegthumbnailer` for video
-thumbnails, `localsearch` for full-text search.
-
-## Hacking on it
-
-Three scripts are the whole developer interface, and they work from any
-directory:
+## Eltávolítás
 
 ```bash
-./bin/build      # cmake + ninja into build/, then run ./build/omanta
-./bin/test       # the headless suites (ctest, ~17s)
-./bin/install    # user-local install: ~/.local/bin symlink, desktop entry, icon
+omafiles-switch nautilus && omafiles-switch remove-menu
+sudo pacman -R omafiles
+``"
+
+## Követelmények
+
+Arch Linux Omarchy-val. A függőségek (`qt6-base`, `qt6-declarative`, `glib2`,
+`gvfs`, `libarchive`, `tinysparql`) az Omarchy alap telepítésében szerepelnek.
+Opcionális: `gvfs-smb`/`gvfs-mtp`/`gvfs-gphoto2` hálózati megosztásokhoz,
+`ffmpegthumbnailer` videó miniatűrökhöz, `localsearch` teljes szöveges kereséshez.
+
+## Fejlesztés
+
+```bash
+./bin/build      # cmake + ninja a build/ mappába, majd futtatás
+./bin/test       # fej nélküli tesztek (ctest)
+./bin/install    # felhasználói telepítés: ~/.local/bin symlink
 ```
 
-`./bin/install` never touches `/usr` or pacman, and installs alongside your
-existing file manager — later rebuilds are picked up without reinstalling. For
-a real package instead, use the `makepkg -si` route above.
-
-Requires `cmake`, `ninja` and the Qt 6 development packages in addition to the
-runtime dependencies above.
-
-## License
+## Licenc
 
 MIT

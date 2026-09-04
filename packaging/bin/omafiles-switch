@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# omarchy:summary=Switch the default file manager between omanta and Nautilus
+# omarchy:summary=Switch the default file manager between omafiles and Nautilus
 #
 # Flips every per-user integration point that decides "which file manager":
 #
-#   - xdg-mime defaults: inode/directory plus every archive type omanta's
+#   - xdg-mime defaults: inode/directory plus every archive type omafiles's
 #     .desktop declares (the same set Nautilus registers)
 #   - the SUPER+SHIFT+F / SUPER+ALT+SHIFT+F bindings, via a managed block
 #     in ~/.config/hypr/bindings.lua (hl.unbind + o.bind, the documented
 #     override pattern — Omarchy's own files are never touched)
 #
 # The org.freedesktop.FileManager1 D-Bus name is claimed at runtime by
-# whichever file manager starts first while the name is free; omanta
+# whichever file manager starts first while the name is free; omafiles
 # declines it when Nautilus owns it. Switching therefore also means
 # closing the other file manager's windows — the script says so rather
 # than killing anything.
@@ -20,29 +20,29 @@
 # (SUPER+CTRL+O) via ~/.config/omarchy/extensions/omarchy-menu.jsonc;
 # the shell watches that file, so the row appears without a restart.
 #
-# Everything is reversible: `omanta-switch nautilus` plus `remove-menu`
+# Everything is reversible: `omafiles-switch nautilus` plus `remove-menu`
 # restores the stock Omarchy state exactly.
 
 set -euo pipefail
 
-OMANTA_DESKTOP="omanta.desktop"
+OMAFILES_DESKTOP="omafiles.desktop"
 NAUTILUS_DESKTOP="org.gnome.Nautilus.desktop"
 CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 BINDINGS_FILE="$CONFIG_HOME/hypr/bindings.lua"
 MENU_FILE="$CONFIG_HOME/omarchy/extensions/omarchy-menu.jsonc"
-BLOCK_BEGIN="-- >>> omanta-switch managed block, do not edit by hand"
-BLOCK_END="-- <<< omanta-switch managed block"
-MENU_BEGIN="// >>> omanta-switch managed block, do not edit by hand"
-MENU_END="// <<< omanta-switch managed block"
+BLOCK_BEGIN="-- >>> omafiles-switch managed block, do not edit by hand"
+BLOCK_END="-- <<< omafiles-switch managed block"
+MENU_BEGIN="// >>> omafiles-switch managed block, do not edit by hand"
+MENU_END="// <<< omafiles-switch managed block"
 
-die() { echo "omanta-switch: $*" >&2; exit 1; }
+die() { echo "omafiles-switch: $*" >&2; exit 1; }
 
 find_desktop_file() {
     local dir IFS=:
     for dir in "${XDG_DATA_HOME:-$HOME/.local/share}" ${XDG_DATA_DIRS:-/usr/local/share:/usr/share}; do
-        [ -f "$dir/applications/$OMANTA_DESKTOP" ] && { echo "$dir/applications/$OMANTA_DESKTOP"; return; }
+        [ -f "$dir/applications/$OMAFILES_DESKTOP" ] && { echo "$dir/applications/$OMAFILES_DESKTOP"; return; }
     done
-    die "$OMANTA_DESKTOP not found in any XDG applications directory — is omanta installed?"
+    die "$OMAFILES_DESKTOP not found in any XDG applications directory — is omafiles installed?"
 }
 
 mimetypes() {
@@ -65,8 +65,8 @@ bindings_block() {
 $BLOCK_BEGIN
 hl.unbind("SUPER + SHIFT + F")
 hl.unbind("SUPER + ALT + SHIFT + F")
-o.bind("SUPER + SHIFT + F", "File manager", "omanta-launch")
-o.bind("SUPER + ALT + SHIFT + F", "File manager (cwd)", "omanta-launch-cwd")
+o.bind("SUPER + SHIFT + F", "Fájlkezelő", "omafiles-launch")
+o.bind("SUPER + ALT + SHIFT + F", "Fájlkezelő (cwd)", "omafiles-launch-cwd")
 $BLOCK_END
 EOF
 }
@@ -100,7 +100,7 @@ reload_hyprland() {
 
 menu_entry() {
     cat <<'EOF'
-  "trigger.toggle.file-manager": {"icon":"󰉋","label":"Omanta File Manager","checked":"xdg-mime query default inode/directory | grep -qx omanta.desktop","action":"omanta-switch toggle"},
+  "trigger.toggle.file-manager": {"icon":"󰉋","label":"Omafiles Fájlkezelő","checked":"xdg-mime query default inode/directory | grep -qx omafiles.desktop","action":"omafiles-switch toggle"},
 EOF
 }
 
@@ -152,37 +152,37 @@ add_menu_block() {
     rm -f "$backup"
 }
 
-switch_to_omanta() {
-    apply_defaults "$OMANTA_DESKTOP"
+switch_to_omafiles() {
+    apply_defaults "$OMAFILES_DESKTOP"
     add_bindings_block
     reload_hyprland
-    echo "Default file manager: omanta"
-    echo "SUPER+SHIFT+F now launches omanta. Close any open Nautilus windows"
-    echo "so omanta can claim org.freedesktop.FileManager1 on its next start."
+    echo "Alapértelmezett fájlkezelő: omafiles"
+    echo "A SUPER+SHIFT+F most az omafiles-t indítja. Zárd be a megnyitott Nautilus ablakokat,"
+    hogy az omafiles az org.freedesktop.FileManager1-et igényelhesse a következő indításkor."
 }
 
 switch_to_nautilus() {
     apply_defaults "$NAUTILUS_DESKTOP"
     remove_bindings_block
     reload_hyprland
-    echo "Default file manager: Nautilus (stock Omarchy state restored)"
-    echo "Close any open omanta windows so Nautilus can claim"
-    echo "org.freedesktop.FileManager1 on its next start."
+    echo "Alapértelmezett fájlkezelő: Nautilus (az alap Omarchy állapot visszaállítva)"
+    echo "Zárd be a megnyitott omafiles ablakokat, hogy a Nautilus"
+    echo "az org.freedesktop.FileManager1-et igényelhesse a következő indításkor."
 }
 
 status() {
     local def owner=""
     def="$(current_default)"
-    echo "inode/directory default : ${def:-unset}"
+    echo "inode/directory alapértelmezett : ${def:-nincs beállítva}"
     if [ -f "$BINDINGS_FILE" ] && grep -qF -- "$BLOCK_BEGIN" "$BINDINGS_FILE"; then
-        echo "SUPER+SHIFT+F binding   : omanta (managed override present)"
+        echo "SUPER+SHIFT+F billentyűkombináció : omafiles (kezelt felüldefiniálás)"
     else
-        echo "SUPER+SHIFT+F binding   : stock (Nautilus)"
+        echo "SUPER+SHIFT+F billentyűkombináció : alapértelmezett (Nautilus)"
     fi
     if [ -f "$MENU_FILE" ] && grep -qF -- "$MENU_BEGIN" "$MENU_FILE"; then
-        echo "Toggle-menu entry       : installed"
+        echo "Toggle menü bejegyzés          : telepítve"
     else
-        echo "Toggle-menu entry       : not installed"
+        echo "Toggle menü bejegyzés          : nincs telepítve"
     fi
     if command -v gdbus >/dev/null; then
         owner="$(gdbus call --session --dest org.freedesktop.DBus \
@@ -190,24 +190,24 @@ status() {
             --method org.freedesktop.DBus.GetNameOwner \
             org.freedesktop.FileManager1 2>/dev/null || true)"
     fi
-    echo "FileManager1 owned      : $([ -n "$owner" ] && echo yes || echo "no (next file manager to start claims it)")"
+    echo "FileManager1 tulajdonos        : $([ -n "$owner" ] && echo igen || echo "nem (a következő fájlkezelő igényli induláskor)")"
 }
 
 case "${1-status}" in
-    omanta)       switch_to_omanta ;;
+    omafiles)     switch_to_omafiles ;;
     nautilus)     switch_to_nautilus ;;
     toggle)
-        if [ "$(current_default)" = "$OMANTA_DESKTOP" ]; then
+        if [ "$(current_default)" = "$OMAFILES_DESKTOP" ]; then
             switch_to_nautilus
         else
-            switch_to_omanta
+            switch_to_omafiles
         fi
         ;;
     status)       status ;;
-    install-menu) add_menu_block; echo "Toggle-menu entry installed (SUPER+CTRL+O → Toggle)" ;;
-    remove-menu)  remove_menu_block; echo "Toggle-menu entry removed" ;;
+    install-menu) add_menu_block; echo "Toggle menü bejegyzés telepítve (SUPER+CTRL+O → Kapcsoló)" ;;
+    remove-menu)  remove_menu_block; echo "Toggle menü bejegyzés eltávolítva" ;;
     *)
-        echo "usage: omanta-switch [omanta|nautilus|toggle|status|install-menu|remove-menu]" >&2
+        echo "használat: omafiles-switch [omafiles|nautilus|toggle|status|install-menu|remove-menu]" >&2
         exit 2
         ;;
 esac

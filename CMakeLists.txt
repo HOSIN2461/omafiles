@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
-project(omanta VERSION 0.1.3 LANGUAGES CXX)
+project(omafiles VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 DBus Svg)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 DBus Svg LinguistTools)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 pkg_check_modules(LIBARCHIVE REQUIRED IMPORTED_TARGET libarchive)
@@ -14,7 +14,7 @@ pkg_check_modules(TINYSPARQL REQUIRED IMPORTED_TARGET tinysparql-3.0)
 qt_standard_project_setup(REQUIRES 6.5)
 qt_policy(SET QTP0004 NEW)
 
-qt_add_executable(omanta
+qt_add_executable(omafiles
     src/main.cpp
     src/Application.cpp
     src/Application.h
@@ -75,8 +75,8 @@ qt_add_executable(omanta
 
 set_source_files_properties(qml/Colors.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
-qt_add_qml_module(omanta
-    URI Omanta
+qt_add_qml_module(omafiles
+    URI Omafiles
     VERSION 1.0
     QML_FILES
         qml/Main.qml
@@ -106,14 +106,14 @@ qt_add_qml_module(omanta
 # GIO's gdbusintrospection.h declares a struct member named `signals`, which
 # Qt's unprefixed keyword macros turn into a syntax error. Any Qt+GIO project
 # must drop the unprefixed keywords and use Q_SIGNALS/Q_SLOTS/Q_EMIT.
-target_compile_definitions(omanta PRIVATE QT_NO_KEYWORDS)
+target_compile_definitions(omafiles PRIVATE QT_NO_KEYWORDS)
 
 # Qt generates a type-registration file that includes each QML_ELEMENT header
 # by bare name (<DirectoryModel.h>), so src/ has to be on the include path or
 # the registrations silently compile to nothing.
-target_include_directories(omanta PRIVATE src)
+target_include_directories(omafiles PRIVATE src)
 
-target_link_libraries(omanta PRIVATE
+target_link_libraries(omafiles PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Quick
@@ -125,17 +125,25 @@ target_link_libraries(omanta PRIVATE
     PkgConfig::TINYSPARQL
 )
 
-option(OMANTA_BUILD_TESTS "Build the model test suite" ON)
-if(OMANTA_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
+# --- Hungarian translation ---
+set(TS_FILES translations/hu.ts)
+qt_add_translation(omafiles ${TS_FILES})
+qt_add_resources(omafiles "translations"
+    PREFIX "/"
+    FILES ${QM_FILES}
+)
+
+option(OMAFILES_BUILD_TESTS "Build the model test suite" ON)
+if(OMAFILES_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
     enable_testing()
     add_subdirectory(tests)
 endif()
 
-install(TARGETS omanta RUNTIME DESTINATION bin)
-install(FILES LICENSE DESTINATION share/licenses/omanta)
-install(FILES packaging/omanta.desktop DESTINATION share/applications)
-install(FILES packaging/omanta.svg DESTINATION share/icons/hicolor/scalable/apps)
-install(DIRECTORY packaging/actions/ DESTINATION share/omanta/actions FILES_MATCHING PATTERN "*.toml")
-install(PROGRAMS packaging/bin/omanta-dropbox-link DESTINATION bin)
-install(PROGRAMS packaging/bin/omanta-switch packaging/bin/omanta-launch
-        packaging/bin/omanta-launch-cwd DESTINATION bin)
+install(TARGETS omafiles RUNTIME DESTINATION bin)
+install(FILES LICENSE DESTINATION share/licenses/omafiles)
+install(FILES packaging/omafiles.desktop DESTINATION share/applications)
+install(FILES packaging/omafiles.svg DESTINATION share/icons/hicolor/scalable/apps)
+install(DIRECTORY packaging/actions/ DESTINATION share/omafiles/actions FILES_MATCHING PATTERN "*.toml")
+install(PROGRAMS packaging/bin/omafiles-dropbox-link DESTINATION bin)
+install(PROGRAMS packaging/bin/omafiles-switch packaging/bin/omafiles-launch
+        packaging/bin/omafiles-launch-cwd DESTINATION bin)

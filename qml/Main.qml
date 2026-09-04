@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // A window. Several tabs, one visible at a time, plus the chrome that acts on
 // whichever is current. Windows are independent — closing one never disturbs

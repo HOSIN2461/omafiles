@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // Nautilus's "Visible Columns" dialog: every column in the user's order, a
 // checkbox per column, ↑/↓ to reorder. Changes apply live — the list view

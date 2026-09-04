@@ -12,7 +12,7 @@
 
 namespace {
 
-constexpr const char *kWindowUrl = "qrc:/qt/qml/Omanta/qml/Main.qml";
+constexpr const char *kWindowUrl = "qrc:/qt/qml/Omafiles/qml/Main.qml";
 
 } // namespace
 

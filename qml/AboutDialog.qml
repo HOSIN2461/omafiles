@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // About Files — the hamburger menu's last entry, omacalc-flat.
 Dialog {

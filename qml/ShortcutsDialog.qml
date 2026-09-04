@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // Nautilus's Keyboard Shortcuts window (Ctrl+?), as one scrollable themed
 // list. The data is a static mirror of what Main.qml and Tab.qml actually

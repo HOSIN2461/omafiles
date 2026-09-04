@@ -1,4 +1,4 @@
-// omanta — a file manager for Omarchy.
+// omafiles — a file manager for Omarchy.
 //
 // Single process, many windows, D-Bus activated: the same shape as Nautilus,
 // because anything else changes how the desktop's keybindings and "reveal in
@@ -18,17 +18,19 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QGuiApplication>
+#include <QLocale>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QTranslator>
 #include <QUrl>
 
 #include <cstdio>
 
 namespace {
 
-constexpr const char *kServiceName = "org.omarchy.omanta";
-constexpr const char *kServicePath = "/org/omarchy/omanta";
+constexpr const char *kServiceName = "org.omarchy.omafiles";
+constexpr const char *kServicePath = "/org/omarchy/omafiles";
 constexpr const char *kFileManager1Name = "org.freedesktop.FileManager1";
 constexpr const char *kFileManager1Path = "/org/freedesktop/FileManager1";
 
@@ -75,11 +77,19 @@ int main(int argc, char *argv[])
     QQuickWindow::setDefaultAlphaBuffer(true);
 
     QGuiApplication app(argc, argv);
-    app.setApplicationName(QStringLiteral("omanta"));
-    app.setApplicationDisplayName(QStringLiteral("Files"));
+    app.setApplicationName(QStringLiteral("omafiles"));
+    app.setApplicationDisplayName(QStringLiteral("Omafiles"));
     app.setOrganizationDomain(QStringLiteral("omarchy.org"));
-    app.setDesktopFileName(QStringLiteral("omanta"));
-    app.setApplicationVersion(QStringLiteral("0.1.3"));
+    app.setDesktopFileName(QStringLiteral("omafiles"));
+    app.setApplicationVersion(QStringLiteral("0.1.0"));
+
+    // --- Load translation ---
+    QTranslator translator;
+    const QString locale = QLocale::system().name(); // e.g. "hu_HU"
+    if (translator.load(QLatin1String("omafiles_") + locale,
+                        QLatin1String(":/translations"))) {
+        app.installTranslator(&translator);
+    }
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("Browse files."));
@@ -128,13 +138,13 @@ int main(int argc, char *argv[])
     Platform platform;
     SystemTheme systemTheme;
 
-    // Registered under their own URI, never into "Omanta". Mixing manual
+    // Registered under their own URI, never into "Omafiles". Mixing manual
     // registrations into a URI owned by qt_add_qml_module is unsupported, and
     // it fails silently: the module's own C++ types stop resolving in QML with
     // nothing more than "X is not a type" to go on.
-    qmlRegisterSingletonInstance("Omanta.Runtime", 1, 0, "App", &application);
-    qmlRegisterSingletonInstance("Omanta.Runtime", 1, 0, "Platform", &platform);
-    qmlRegisterSingletonInstance("Omanta.Runtime", 1, 0, "Theme", &systemTheme);
+    qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "App", &application);
+    qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "Platform", &platform);
+    qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "Theme", &systemTheme);
 
     if (isPrimary) {
         new OmantaAdaptor(&application);
@@ -142,13 +152,13 @@ int main(int argc, char *argv[])
 
         // FileManager1 is owned by whichever file manager got there first. If
         // Nautilus is running, we simply do not offer it — that is deliberate,
-        // so both can be installed side by side while omanta is on trial.
+        // so both can be installed side by side while omafiles is on trial.
         if (session.registerService(QLatin1String(kFileManager1Name))) {
             new FileManager1Adaptor(&application);
             session.registerObject(QLatin1String(kFileManager1Path), &application);
         } else {
             std::fprintf(stderr,
-                         "omanta: org.freedesktop.FileManager1 is already owned "
+                         "omafiles: org.freedesktop.FileManager1 is already owned "
                          "(Nautilus running?) — not claiming it\n");
         }
     }

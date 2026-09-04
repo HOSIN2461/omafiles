@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // Grid view. Zoom changes the cell size; the delegate scales with it.
 Item {

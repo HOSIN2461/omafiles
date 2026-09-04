@@ -1,7 +1,7 @@
 pragma Singleton
 
 import QtQuick
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // One place for every colour. When the active Omarchy theme's colors.toml is
 // present, all roles come from it — omanta then matches the terminal, the

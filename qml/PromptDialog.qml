@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // Asks for one line of text — a new folder's name, a file's new name.
 Dialog {

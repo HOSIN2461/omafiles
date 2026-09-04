@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // A small themed directory chooser — "Extract to…" needs one, and omanta
 // picking folders with a GTK portal dialog would be absurd. Navigate by

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# omarchy:summary=Launch Files (omafiles)
+
+exec setsid uwsm-app -- omafiles --new-window

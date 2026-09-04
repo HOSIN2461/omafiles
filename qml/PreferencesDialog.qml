@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Omanta.Runtime
+import Omafiles.Runtime
 
 // Nautilus's Preferences dialog, over the Settings store. Every Nautilus
 // row now has its feature; nothing is deliberately absent.
