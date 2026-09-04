@@ -72,7 +72,7 @@ private:
 
 void TestServers::initTestCase()
 {
-    qputenv("OMANTA_SERVERS_FILE", storeFile().toUtf8());
+    qputenv("OMAFILES_SERVERS_FILE", storeFile().toUtf8());
 }
 
 void TestServers::addsAndPersists()

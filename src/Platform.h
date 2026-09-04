@@ -35,7 +35,7 @@ public:
     // The user's document templates (XDG Templates dir), each a {name, path}
     // map, name-sorted; empty when the dir is missing, empty, or disabled
     // (XDG defines "equals $HOME" as disabled). Feeds the context menu's
-    // New Document submenu. OMANTA_TEMPLATES_DIR overrides (tests).
+    // New Document submenu. OMAFILES_TEMPLATES_DIR overrides (tests).
     Q_INVOKABLE QVariantList templates() const;
 
     // Whether "Extract Here" applies — the content types the archive engine

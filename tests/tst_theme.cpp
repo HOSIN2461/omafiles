@@ -72,7 +72,7 @@ void TestTheme::parseIgnoresJunk()
 
 void TestTheme::missingFileMeansNoThemeColors()
 {
-    qputenv("OMANTA_COLORS_FILE", (m_dir.filePath(QStringLiteral("nope.toml"))).toUtf8());
+    qputenv("OMAFILES_COLORS_FILE", (m_dir.filePath(QStringLiteral("nope.toml"))).toUtf8());
     SystemTheme theme;
     QVERIFY(!theme.hasThemeColors());
 }
@@ -81,7 +81,7 @@ void TestTheme::minimalFormatDerivesEveryRole()
 {
     // What omarchy-theme-set generates for an old-format theme: the anchors
     // and the terminal palette, nothing else. Everything must still resolve.
-    qputenv("OMANTA_COLORS_FILE", writeColors(QStringLiteral(
+    qputenv("OMAFILES_COLORS_FILE", writeColors(QStringLiteral(
         "accent = \"#69c3ff\"\n"
         "selection = \"#bcc1dc\"\n"
         "background = \"#111422\"\n"
@@ -111,7 +111,7 @@ void TestTheme::minimalFormatDerivesEveryRole()
 
 void TestTheme::fullFormatUsesAuthoredRoles()
 {
-    qputenv("OMANTA_COLORS_FILE", writeColors(QStringLiteral(
+    qputenv("OMAFILES_COLORS_FILE", writeColors(QStringLiteral(
         "mode = \"dark\"\n"
         "accent = \"#89b4fa\"\n"
         "selection = \"#45475a\"\n"
@@ -134,7 +134,7 @@ void TestTheme::modeKeyBeatsLuminance()
 {
     // A light theme with a darkish background must still be treated as light
     // when it says so.
-    qputenv("OMANTA_COLORS_FILE", writeColors(QStringLiteral(
+    qputenv("OMAFILES_COLORS_FILE", writeColors(QStringLiteral(
         "mode = \"light\"\n"
         "accent = \"#3457d5\"\n"
         "background = \"#606060\"\n"
@@ -151,7 +151,7 @@ void TestTheme::themeSwitchIsPickedUpLive()
         "accent = \"#69c3ff\"\n"
         "background = \"#111422\"\n"
         "foreground = \"#bcc1dc\"\n"));
-    qputenv("OMANTA_COLORS_FILE", path.toUtf8());
+    qputenv("OMAFILES_COLORS_FILE", path.toUtf8());
 
     SystemTheme theme;
     QVERIFY(theme.hasThemeColors());

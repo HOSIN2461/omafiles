@@ -14,14 +14,14 @@ arch=('x86_64')
 url="https://github.com/HOSIN2461/omafiles"
 license=('MIT')
 install="$pkgname.install"
-depends=('qt6-base' 'qt6-declarative' 'qt6-multimedia' 'glib2' 'gvfs' 'hicolor-icon-theme'
-         'libarchive' 'tinysparql')
+depends=('qt6-base' 'qt6-declarative' 'glib2' 'gvfs' 'hicolor-icon-theme'
+         'libarchive' 'tinysparql' 'curl' 'pacman')
 optdepends=('gvfs-smb: smb:// megosztások böngészése'
             'gvfs-mtp: telefonok MTP-n keresztül'
             'gvfs-gphoto2: kamerák'
             'ffmpegthumbnailer: videó miniatűrök'
             'localsearch: teljes szöveges keresés')
-makedepends=('cmake' 'ninja' 'git' 'qt6-tools')
+makedepends=('cmake' 'ninja' 'git')
 source=("$pkgname::git+https://github.com/HOSIN2461/omafiles.git#tag=v$pkgver")
 sha256sums=('SKIP')
 

@@ -93,7 +93,7 @@ QStringList Platform::supportedSchemes() const
 
 QVariantList Platform::templates() const
 {
-    QString dir = qEnvironmentVariable("OMANTA_TEMPLATES_DIR");
+    QString dir = qEnvironmentVariable("OMAFILES_TEMPLATES_DIR");
     if (dir.isEmpty()) {
         const char *xdg = g_get_user_special_dir(G_USER_DIRECTORY_TEMPLATES);
         dir = xdg ? QString::fromUtf8(xdg) : QDir::homePath() + QStringLiteral("/Templates");
@@ -183,7 +183,7 @@ bool Platform::openPath(const QString &path) const
     GError *error = nullptr;
     const bool ok = g_app_info_launch_default_for_uri(uri.constData(), nullptr, &error);
     if (!ok) {
-        qWarning("omanta: cannot open %s: %s", qUtf8Printable(path),
+        qWarning("omafiles: cannot open %s: %s", qUtf8Printable(path),
                  error ? error->message : "no handler");
     }
     g_clear_error(&error);
@@ -212,7 +212,7 @@ bool Platform::openTerminal(const QString &directory) const
             return true;
     }
 
-    qWarning("omanta: no terminal found (tried $TERMINAL, xdg-terminal-exec, x-terminal-emulator)");
+    qWarning("omafiles: no terminal found (tried $TERMINAL, xdg-terminal-exec, x-terminal-emulator)");
     return false;
 }
 

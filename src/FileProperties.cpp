@@ -542,7 +542,7 @@ bool FileProperties::launchWith(const QString &applicationId) const
     GError *error = nullptr;
     const bool ok = g_app_info_launch(application, files, nullptr, &error);
     if (!ok) {
-        qWarning("omanta: could not launch %s: %s", qUtf8Printable(applicationId),
+        qWarning("omafiles: could not launch %s: %s", qUtf8Printable(applicationId),
                  error ? error->message : "unknown");
     }
     g_clear_error(&error);

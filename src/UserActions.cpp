@@ -93,7 +93,7 @@ UserActions::UserActions(QObject *parent)
 QStringList UserActions::actionDirs() const
 {
     // Test override first; otherwise user dir shadows the shipped dir.
-    const QString override = qEnvironmentVariable("OMANTA_ACTIONS_DIR");
+    const QString override = qEnvironmentVariable("OMAFILES_ACTIONS_DIR");
     if (!override.isEmpty())
         return { override };
     return { QStringLiteral("/usr/share/omanta/actions"),

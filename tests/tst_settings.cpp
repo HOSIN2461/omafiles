@@ -6,7 +6,7 @@
 #include <QTest>
 
 // The preferences store: plain watched file, Nautilus-default values,
-// validation on read. Each test points OMANTA_SETTINGS_FILE at its own
+// validation on read. Each test points OMAFILES_SETTINGS_FILE at its own
 // scratch file — the suite must never read or write the real config.
 class TestSettings : public QObject
 {
@@ -42,7 +42,7 @@ void TestSettings::init()
 {
     QVERIFY(m_dir.isValid());
     m_file = m_dir.filePath(QStringLiteral("settings-%1").arg(QTest::currentTestFunction()));
-    qputenv("OMANTA_SETTINGS_FILE", m_file.toUtf8());
+    qputenv("OMAFILES_SETTINGS_FILE", m_file.toUtf8());
 }
 
 void TestSettings::defaultsAreNautilus()

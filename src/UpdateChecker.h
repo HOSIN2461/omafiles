@@ -1,9 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QTimer>
+#include <QProcess>
 
 class UpdateChecker : public QObject
 {
@@ -28,32 +26,28 @@ public:
     Q_INVOKABLE void checkForUpdates();
     Q_INVOKABLE void downloadAndInstall();
 
-signals:
+Q_SIGNALS:
     void updateAvailableChanged();
     void checkingChanged();
     void downloadProgressChanged();
     void errorOccurred();
     void updateInstalled();
 
-private slots:
-    void onCheckFinished(QNetworkReply *reply);
-    void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onDownloadFinished(QNetworkReply *reply);
-
 private:
     static bool isNewerVersion(const QString &current, const QString &latest);
     void installPackage(const QString &packagePath);
 
-    QNetworkAccessManager *m_networkManager;
-    QTimer *m_checkTimer;
-    
+    QProcess *m_checkProcess;
+    QProcess *m_downloadProcess;
+
     bool m_updateAvailable;
     bool m_checking;
     int m_downloadProgress;
     QString m_latestVersion;
     QString m_downloadUrl;
+    QString m_packageName;
     QString m_errorMessage;
-    
+
     static constexpr const char *kRepoUrl = "https://api.github.com/repos/HOSIN2461/omafiles";
     static constexpr const char *kCurrentVersion = "0.1.0";
 };

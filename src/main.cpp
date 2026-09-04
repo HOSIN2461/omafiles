@@ -92,7 +92,6 @@ int main(int argc, char *argv[])
                         QLatin1String(":/translations"))) {
         app.installTranslator(&translator);
     }
-
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("Browse files."));
     parser.addHelpOption();

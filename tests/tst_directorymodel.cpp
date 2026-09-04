@@ -118,7 +118,7 @@ void TestDirectoryModel::emptyDirectoryIsEmpty()
 void TestDirectoryModel::reportsErrorForMissingDirectory()
 {
     DirectoryModel model;
-    model.setPath(QStringLiteral("/definitely/not/a/real/path/omanta"));
+    model.setPath(QStringLiteral("/definitely/not/a/real/path/omafiles"));
 
     QTRY_VERIFY(!model.errorMessage().isEmpty());
     QCOMPARE(model.rowCount(), 0);

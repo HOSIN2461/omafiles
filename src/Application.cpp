@@ -48,7 +48,7 @@ QObject *Application::createWindow(const QString &path, const QString &selectNam
     QQmlComponent component(m_engine, QUrl(QLatin1String(kWindowUrl)));
     if (component.isError()) {
         for (const QQmlError &error : component.errors())
-            qCritical("omanta: %s", qUtf8Printable(error.toString()));
+            qCritical("omafiles: %s", qUtf8Printable(error.toString()));
         return nullptr;
     }
 
@@ -59,7 +59,7 @@ QObject *Application::createWindow(const QString &path, const QString &selectNam
 
     QObject *window = component.createWithInitialProperties(initial);
     if (!window) {
-        qCritical("omanta: could not create window");
+        qCritical("omafiles: could not create window");
         return nullptr;
     }
 

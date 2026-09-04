@@ -9,7 +9,7 @@ class QFileSystemWatcher;
 
 // User preferences — Nautilus's Preferences dialog, persisted the house way:
 // a plain watched file (~/.config/omanta/settings, key=value per line,
-// OMANTA_SETTINGS_FILE overrides for tests), not gsettings. Defaults match
+// OMAFILES_SETTINGS_FILE overrides for tests), not gsettings. Defaults match
 // Omarchy's out-of-the-box Nautilus, which is GNOME schema defaults — that is
 // the parity contract, not this machine's dconf.
 //

@@ -4,7 +4,7 @@ project(omafiles VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 DBus Svg Network LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 DBus Svg)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 pkg_check_modules(LIBARCHIVE REQUIRED IMPORTED_TARGET libarchive)
@@ -123,18 +123,15 @@ target_link_libraries(omafiles PRIVATE
     Qt6::QuickControls2
     Qt6::DBus
     Qt6::Svg
-    Qt6::Network
     PkgConfig::GIO
     PkgConfig::LIBARCHIVE
     PkgConfig::TINYSPARQL
 )
 
-# --- Hungarian translation ---
-set(TS_FILES translations/hu.ts)
-qt_add_translation(omafiles ${TS_FILES})
+# --- Hungarian translation (pre-compiled .qm shipped in-tree, no LinguistTools needed) ---
 qt_add_resources(omafiles "translations"
-    PREFIX "/"
-    FILES ${QM_FILES}
+    PREFIX "/translations"
+    FILES translations/omafiles_hu.qm
 )
 
 option(OMAFILES_BUILD_TESTS "Build the model test suite" ON)
