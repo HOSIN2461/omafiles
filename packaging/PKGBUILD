@@ -21,7 +21,7 @@ optdepends=('gvfs-smb: smb:// megosztások böngészése'
             'gvfs-gphoto2: kamerák'
             'ffmpegthumbnailer: videó miniatűrök'
             'localsearch: teljes szöveges keresés')
-makedepends=('cmake' 'ninja' 'git')
+makedepends=('cmake' 'ninja' 'git' 'qt6-tools')
 source=("$pkgname::git+https://github.com/HOSIN2461/omafiles.git#tag=v$pkgver")
 sha256sums=('SKIP')
 
