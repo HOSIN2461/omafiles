@@ -1694,7 +1694,6 @@ Window {
         property var actionPaths: []
         property var templateFiles: []
         property bool newDocumentShown: false
-        property bool clipboardMenuShown: false
         onAboutToShow: {
             folderBookmarked = root.currentTab
                 ? sidebar.isBookmarked(root.currentTab.path) : false;
@@ -1737,29 +1736,8 @@ Window {
                 }
                 newDocumentShown = wantNewDocument;
             }
-
-            // Insert the clipboard submenu after "Open in New Tab" — same
-            // trick as the newDocumentMenu, removed on hide.
-            const wantClipboard = root.currentTab && root.currentTab.selectionCount > 0;
-            if (wantClipboard && !clipboardMenuShown) {
-                for (let i = 0; i < contextMenu.count; ++i) {
-                    const item = contextMenu.itemAt(i);
-                    if (item && item.text === qsTr("Open in New Tab")) {
-                        contextMenu.insertMenu(i + 1, clipboardMenu);
-                        clipboardMenuShown = true;
-                        break;
-                    }
-                }
-            } else if (!wantClipboard && clipboardMenuShown) {
-                contextMenu.removeMenu(clipboardMenu);
-                clipboardMenuShown = false;
-            }
         }
         onAboutToHide: {
-            if (clipboardMenuShown) {
-                contextMenu.removeMenu(clipboardMenu);
-                clipboardMenuShown = false;
-            }
             if (newDocumentShown) {
                 contextMenu.removeMenu(newDocumentMenu);
                 newDocumentShown = false;
@@ -1796,6 +1774,30 @@ Window {
                 const selected = root.currentTab.selectedPaths();
                 if (selected.length === 1 && Platform.isDir(selected[0]))
                     root.addTab(selected[0]);
+            }
+        }
+
+        Menu {
+            id: clipboardMenu
+            title: qsTr("Clipboard")
+            visible: root.currentTab && root.currentTab.selectionCount > 0
+            height: visible ? implicitHeight : 0
+            font.pixelSize: root.fontPixelSize
+
+            MenuItem {
+                text: qsTr("Cut")
+                enabled: root.currentTab && root.currentTab.selectionCount > 0
+                onTriggered: Clipboard.cutFiles(root.selection())
+            }
+            MenuItem {
+                text: qsTr("Copy")
+                enabled: root.currentTab && root.currentTab.selectionCount > 0
+                onTriggered: Clipboard.copyFiles(root.selection())
+            }
+            MenuItem {
+                text: qsTr("Paste")
+                enabled: Clipboard.hasFiles && root.viewWritable
+                onTriggered: root.paste()
             }
         }
 
@@ -1947,30 +1949,6 @@ Window {
             }
             onObjectAdded: (index, object) => contextMenu.addItem(object)
             onObjectRemoved: (index, object) => contextMenu.removeItem(object)
-        }
-    }
-
-    // Clipboard submenu — Vágás, Másolás, Beillesztés csoportosítva a
-    // Windows 11-es menü mintájára. Ugyanúgy mint a newDocumentMenu,
-    // dinamikusan illeszthető be / távolítható el.
-    Menu {
-        id: clipboardMenu
-        title: qsTr("Clipboard")
-
-        MenuItem {
-            text: qsTr("Cut")
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-            onTriggered: Clipboard.cutFiles(root.selection())
-        }
-        MenuItem {
-            text: qsTr("Copy")
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-            onTriggered: Clipboard.copyFiles(root.selection())
-        }
-        MenuItem {
-            text: qsTr("Paste")
-            enabled: Clipboard.hasFiles && root.viewWritable
-            onTriggered: root.paste()
         }
     }
 
