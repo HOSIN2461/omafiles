@@ -363,7 +363,7 @@
     <message>
         <location filename="../qml/FolderPickerDialog.qml" line="98"/>
         <source>Parent folder</source>
-        <translation type="unfinished">Szülő mappa</translation>
+        <translation>Szülő mappa</translation>
     </message>
     <message>
         <location filename="../qml/FolderPickerDialog.qml" line="145"/>
@@ -374,7 +374,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="1224"/>
+        <location filename="../qml/Main.qml" line="1252"/>
         <source>Could not mount: %1</source>
         <translation>Nem sikerült csatolni: %1</translation>
     </message>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../qml/Main.qml" line="337"/>
         <source>Contents</source>
-        <translation type="unfinished">Tartalom</translation>
+        <translation>Tartalom</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="351"/>
@@ -445,14 +445,14 @@
     </message>
     <message>
         <location filename="../qml/Main.qml" line="429"/>
-        <location filename="../qml/Main.qml" line="1497"/>
+        <location filename="../qml/Main.qml" line="1525"/>
         <source>Last Modified</source>
-        <translation type="unfinished">Legutoljára módosított</translation>
+        <translation>Legutoljára módosított</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="429"/>
         <source>Created</source>
-        <translation type="unfinished">Létrehozva</translation>
+        <translation>Létrehozva</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="429"/>
@@ -525,389 +525,401 @@
         <translation>Mit</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="617"/>
+        <location filename="../qml/Main.qml" line="628"/>
         <source>Could not mount “%1”: %2</source>
         <translation>Nem sikerült csatolni: „%1”: %2</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="702"/>
+        <location filename="../qml/Main.qml" line="713"/>
         <source>Server address</source>
         <translation>Szerver címe</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="708"/>
+        <location filename="../qml/Main.qml" line="719"/>
         <source>Connect</source>
-        <translation type="unfinished">Csatlakozás</translation>
+        <translation>Csatlakozás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="737"/>
+        <location filename="../qml/Main.qml" line="748"/>
         <source>Server Addresses</source>
         <translation>Szerver címek</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="746"/>
+        <location filename="../qml/Main.qml" line="757"/>
         <source>Server addresses are made up of a protocol prefix and an address. Examples:</source>
         <translation>A szerver címek egy protokoll előtagból és egy címből állnak. Példák:</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="768"/>
+        <location filename="../qml/Main.qml" line="779"/>
         <source>Available Protocols</source>
         <translation>Elérhető protokollok</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="775"/>
+        <location filename="../qml/Main.qml" line="786"/>
         <source>Prefix</source>
         <translation>Előtag</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="846"/>
+        <location filename="../qml/Main.qml" line="857"/>
         <source>Cancel</source>
-        <translation type="unfinished">Mégsem</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="916"/>
-        <location filename="../qml/Main.qml" line="1702"/>
-        <location filename="../qml/Main.qml" line="1797"/>
+        <location filename="../qml/Main.qml" line="938"/>
+        <location filename="../qml/Main.qml" line="1731"/>
+        <location filename="../qml/Main.qml" line="1830"/>
         <source>New Folder</source>
         <translation>Új mappa</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="983"/>
+        <location filename="../qml/Main.qml" line="1005"/>
         <source>AppleTalk</source>
         <translation>AppleTalk</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="984"/>
+        <location filename="../qml/Main.qml" line="1006"/>
         <source>File Transfer Protocol</source>
         <translation>Fájlátviteli protokoll</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="986"/>
+        <location filename="../qml/Main.qml" line="1008"/>
         <source>Network File System</source>
         <translation>Hálózati fájlrendszer</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="987"/>
+        <location filename="../qml/Main.qml" line="1009"/>
         <source>Samba</source>
         <translation>SMB</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="988"/>
+        <location filename="../qml/Main.qml" line="1010"/>
         <source>SSH File Transfer Protocol</source>
         <translation>SSH fájlátviteli protokoll</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="990"/>
+        <location filename="../qml/Main.qml" line="1012"/>
         <source>WebDAV</source>
         <translation>WebDAV</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1015"/>
+        <location filename="../qml/Main.qml" line="1037"/>
         <source>Addresses need a protocol prefix — smb://, sftp://, ftp://…</source>
         <translation>A címekhez protokoll előtag szükséges — smb://, sftp://, ftp://…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1046"/>
+        <location filename="../qml/Main.qml" line="1068"/>
         <source>%1 archives</source>
         <translation>%1 archívum</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1047"/>
+        <location filename="../qml/Main.qml" line="1069"/>
         <source>Extract %1 to:</source>
         <translation>Kicsomagolás ide: %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1073"/>
+        <location filename="../qml/Main.qml" line="1095"/>
         <source>Permanently delete “%1”?</source>
         <translation>Véglegesen törlöd: „%1”?</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1074"/>
+        <location filename="../qml/Main.qml" line="1096"/>
         <source>Permanently delete %1 items?</source>
         <translation>Véglegesen törlöd %1 elemet?</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1075"/>
+        <location filename="../qml/Main.qml" line="1097"/>
         <source>This cannot be undone.</source>
         <translation>Ez nem vonható vissza.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1118"/>
+        <location filename="../qml/Main.qml" line="1140"/>
         <source>Name for the new folder</source>
         <translation>Az új mappa neve</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1126"/>
+        <location filename="../qml/Main.qml" line="1148"/>
         <source>New name</source>
         <translation>Új név</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1135"/>
+        <location filename="../qml/Main.qml" line="1157"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1142"/>
+        <location filename="../qml/Main.qml" line="1164"/>
         <source>Empty the trash?</source>
         <translation>Kiüríted a kukát?</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1143"/>
+        <location filename="../qml/Main.qml" line="1165"/>
         <source>Everything in the trash will be permanently deleted. This cannot be undone.</source>
         <translation>A kukában lévő összes elem véglegesen törlődik. Ez nem vonható vissza.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1144"/>
+        <location filename="../qml/Main.qml" line="519"/>
+        <location filename="../qml/Main.qml" line="1166"/>
         <source>Empty Trash</source>
         <translation>Kuka ürítése</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1174"/>
+        <location filename="../qml/Main.qml" line="1202"/>
         <source>Extract</source>
         <translation>Kicsomagolás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1193"/>
+        <location filename="../qml/Main.qml" line="1221"/>
         <source>“%1” is password-protected. Enter the password:</source>
         <translation>„%1” jelszóval védett. Add meg a jelszót:</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1266"/>
+        <location filename="../qml/Main.qml" line="1294"/>
         <source>These files can&apos;t be moved to the trash.</source>
         <translation>Ezek a fájlok nem helyezhetők a kukába.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1267"/>
+        <location filename="../qml/Main.qml" line="1295"/>
         <source>This location has no trash. Delete them permanently instead?</source>
         <translation>Ennek a helynek nincs kukája. Helyette véglegesen törlöd őket?</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1268"/>
+        <location filename="../qml/Main.qml" line="1296"/>
         <source>Delete permanently</source>
-        <translation type="unfinished">Végleges törlés</translation>
+        <translation>Végleges törlés</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1304"/>
+        <location filename="../qml/Main.qml" line="1332"/>
         <source>Undo</source>
-        <translation type="unfinished">Visszavonás</translation>
+        <translation>Visszavonás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1310"/>
+        <location filename="../qml/Main.qml" line="1338"/>
         <source>Redo</source>
-        <translation type="unfinished">Újra</translation>
+        <translation>Újra</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1318"/>
+        <location filename="../qml/Main.qml" line="1346"/>
         <source>Preferences</source>
-        <translation type="unfinished">Beállítások</translation>
+        <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1387"/>
+        <location filename="../qml/Main.qml" line="1415"/>
         <source>Új verzió elérhető: %1</source>
         <translation>Új verzió elérhető: %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1394"/>
+        <location filename="../qml/Main.qml" line="1422"/>
         <source>Frissítés</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1400"/>
+        <location filename="../qml/Main.qml" line="1428"/>
         <source>✕</source>
         <translation>✕</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1453"/>
+        <location filename="../qml/Main.qml" line="1481"/>
         <source>Icon Size</source>
         <translation>Ikonméret</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1479"/>
+        <location filename="../qml/Main.qml" line="1507"/>
         <source>Sort</source>
         <translation>Rendezés</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1483"/>
+        <location filename="../qml/Main.qml" line="1511"/>
         <source>A-Z</source>
         <translation>A–Z</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1490"/>
+        <location filename="../qml/Main.qml" line="1518"/>
         <source>Z-A</source>
         <translation>Z–A</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1504"/>
+        <location filename="../qml/Main.qml" line="1532"/>
         <source>First Modified</source>
-        <translation type="unfinished">Legelőbb módosított</translation>
+        <translation>Legelőbb módosított</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1511"/>
+        <location filename="../qml/Main.qml" line="1539"/>
         <source>Size</source>
-        <translation type="unfinished">Méret</translation>
+        <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1518"/>
+        <location filename="../qml/Main.qml" line="1546"/>
         <source>Type</source>
-        <translation type="unfinished">Típus</translation>
+        <translation>Típus</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1529"/>
+        <location filename="../qml/Main.qml" line="1557"/>
         <source>Visible Columns…</source>
         <translation>Látható oszlopok…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1574"/>
+        <location filename="../qml/Main.qml" line="1602"/>
         <source>New Folder…</source>
         <translation>Új mappa…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1580"/>
+        <location filename="../qml/Main.qml" line="1608"/>
         <source>Open With…</source>
         <translation>Megnyitás ezzel…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1597"/>
+        <location filename="../qml/Main.qml" line="1625"/>
         <source>Copy Location</source>
         <translation>Hely másolása</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1605"/>
-        <location filename="../qml/Main.qml" line="1778"/>
+        <location filename="../qml/Main.qml" line="1633"/>
+        <location filename="../qml/Main.qml" line="1970"/>
         <source>Paste</source>
         <translation>Beillesztés</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1611"/>
+        <location filename="../qml/Main.qml" line="1639"/>
         <source>Paste as Link</source>
         <translation>Beillesztés hivatkozásként</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1618"/>
+        <location filename="../qml/Main.qml" line="1646"/>
         <source>Select All</source>
         <translation>Mindet kijelöl</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1626"/>
-        <location filename="../qml/Main.qml" line="1883"/>
+        <location filename="../qml/Main.qml" line="1654"/>
+        <location filename="../qml/Main.qml" line="1914"/>
         <source>Properties</source>
-        <translation type="unfinished">Tulajdonságok</translation>
+        <translation>Tulajdonságok</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1636"/>
-        <location filename="../qml/Main.qml" line="1929"/>
+        <location filename="../qml/Main.qml" line="1664"/>
+        <location filename="../qml/Main.qml" line="1984"/>
         <source>New Document</source>
         <translation>Új dokumentum</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1713"/>
+        <location filename="../qml/Main.qml" line="1769"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1721"/>
+        <location filename="../qml/Main.qml" line="1777"/>
         <source>Open in Terminal</source>
         <translation>Megnyitás terminálban</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1730"/>
+        <location filename="../qml/Main.qml" line="1786"/>
+        <source>Open in Root</source>
+        <translation>Megnyitás rendszergazdaként</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="1957"/>
+        <source>Clipboard</source>
+        <translation>Vágólap</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="1746"/>
+        <location filename="../qml/Main.qml" line="1792"/>
         <source>Open in New Tab</source>
         <translation>Megnyitás új lapon</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1591"/>
-        <location filename="../qml/Main.qml" line="1896"/>
+        <location filename="../qml/Main.qml" line="1619"/>
+        <location filename="../qml/Main.qml" line="1927"/>
         <source>Reload</source>
         <translation>Újratöltés</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1740"/>
+        <location filename="../qml/Main.qml" line="1866"/>
         <source>Remove Bookmark</source>
         <translation>Könyvjelző eltávolítása</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1740"/>
+        <location filename="../qml/Main.qml" line="1866"/>
         <source>Bookmark This Folder</source>
         <translation>Mappa könyvjelzőzése</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1748"/>
+        <location filename="../qml/Main.qml" line="1872"/>
         <source>Unstar</source>
         <translation>Csillag eltávolítása</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1748"/>
+        <location filename="../qml/Main.qml" line="1872"/>
         <source>Star</source>
         <translation>Csillagozás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1766"/>
+        <location filename="../qml/Main.qml" line="1960"/>
         <source>Cut</source>
         <translation>Kivágás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1772"/>
+        <location filename="../qml/Main.qml" line="1965"/>
         <source>Copy</source>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1786"/>
+        <location filename="../qml/Main.qml" line="1857"/>
         <source>Create Link</source>
-        <translation type="unfinished">Link létrehozása</translation>
+        <translation>Link létrehozása</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1803"/>
+        <location filename="../qml/Main.qml" line="1820"/>
         <source>Rename…</source>
         <translation>Átnevezés…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1814"/>
+        <location filename="../qml/Main.qml" line="1836"/>
         <source>Compress…</source>
         <translation>Tömörítés…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1821"/>
+        <location filename="../qml/Main.qml" line="1843"/>
         <source>Extract Here</source>
         <translation>Kicsomagolás ide</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1828"/>
+        <location filename="../qml/Main.qml" line="1850"/>
         <source>Extract to…</source>
         <translation>Kicsomagolás ide…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1838"/>
+        <location filename="../qml/Main.qml" line="1888"/>
         <source>Forget Connection</source>
         <translation>Kapcsolat elfelejtése</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1846"/>
+        <location filename="../qml/Main.qml" line="1896"/>
         <source>Restore from Trash</source>
         <translation>Visszaállítás a kukából</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1854"/>
+        <location filename="../qml/Main.qml" line="1904"/>
         <source>Empty Trash…</source>
         <translation>Kuka ürítése…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1862"/>
+        <location filename="../qml/Main.qml" line="1804"/>
         <source>Move to Trash</source>
         <translation>Áthelyezés a kukába</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1870"/>
+        <location filename="../qml/Main.qml" line="1812"/>
         <source>Delete Permanently…</source>
         <translation>Végleges törlés…</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1891"/>
+        <location filename="../qml/Main.qml" line="1922"/>
         <source>Hide Hidden Files</source>
         <translation>Rejtett fájlok elrejtése</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1539"/>
-        <location filename="../qml/Main.qml" line="1891"/>
+        <location filename="../qml/Main.qml" line="1567"/>
+        <location filename="../qml/Main.qml" line="1922"/>
         <source>Show Hidden Files</source>
         <translation>Rejtett fájlok megjelenítése</translation>
     </message>
@@ -952,27 +964,27 @@
         <translation type="vanished">Nagyítás (Ctrl++)</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1292"/>
+        <location filename="../qml/Main.qml" line="1320"/>
         <source>New Window</source>
         <translation>Új ablak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1297"/>
+        <location filename="../qml/Main.qml" line="1325"/>
         <source>New Tab</source>
         <translation>Új lap</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1323"/>
+        <location filename="../qml/Main.qml" line="1351"/>
         <source>Keyboard Shortcuts</source>
         <translation>Billentyűparancsok</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1328"/>
+        <location filename="../qml/Main.qml" line="1356"/>
         <source>About Files</source>
         <translation>Névjegy</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1335"/>
+        <location filename="../qml/Main.qml" line="1363"/>
         <source>Check for Updates</source>
         <translation>Frissítések keresése</translation>
     </message>
@@ -1375,7 +1387,7 @@
     <message>
         <location filename="../qml/PropertiesDialog.qml" line="450"/>
         <source>Open</source>
-        <translation type="unfinished">Megnyitás</translation>
+        <translation>Megnyitás</translation>
     </message>
 </context>
 <context>
@@ -1494,7 +1506,7 @@
     <message>
         <location filename="../qml/ShortcutsDialog.qml" line="32"/>
         <source>Reload</source>
-        <translation type="unfinished">Újratöltés</translation>
+        <translation>Újratöltés</translation>
     </message>
     <message>
         <location filename="../qml/ShortcutsDialog.qml" line="33"/>
@@ -1607,7 +1619,7 @@
     <message>
         <location filename="../qml/Sidebar.qml" line="477"/>
         <source>Open in New Tab</source>
-        <translation type="unfinished">Megnyitás új lapon</translation>
+        <translation>Megnyitás új lapon</translation>
     </message>
     <message>
         <location filename="../qml/Sidebar.qml" line="483"/>
@@ -1623,12 +1635,12 @@
 <context>
     <name>Tab</name>
     <message>
-        <location filename="../qml/Tab.qml" line="591"/>
+        <location filename="../qml/Tab.qml" line="595"/>
         <source>No Known Connections</source>
         <translation>Nincsenek ismert kapcsolatok</translation>
     </message>
     <message>
-        <location filename="../qml/Tab.qml" line="600"/>
+        <location filename="../qml/Tab.qml" line="604"/>
         <source>Enter an address to connect to a network location.</source>
         <translation>Adj meg egy címet a hálózati helyhez való csatlakozáshoz.</translation>
     </message>

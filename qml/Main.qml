@@ -1693,6 +1693,7 @@ Window {
         property var actionPaths: []
         property var templateFiles: []
         property bool newDocumentShown: false
+        property bool clipboardMenuShown: false
         onAboutToShow: {
             folderBookmarked = root.currentTab
                 ? sidebar.isBookmarked(root.currentTab.path) : false;
@@ -1735,6 +1736,33 @@ Window {
                 }
                 newDocumentShown = wantNewDocument;
             }
+
+            // Insert the clipboard submenu after "Open in New Tab" — same
+            // trick as the newDocumentMenu, removed on hide.
+            const wantClipboard = root.currentTab && root.currentTab.selectionCount > 0;
+            if (wantClipboard && !clipboardMenuShown) {
+                for (let i = 0; i < contextMenu.count; ++i) {
+                    const item = contextMenu.itemAt(i);
+                    if (item && item.text === qsTr("Open in New Tab")) {
+                        contextMenu.insertMenu(i + 1, clipboardMenu);
+                        clipboardMenuShown = true;
+                        break;
+                    }
+                }
+            } else if (!wantClipboard && clipboardMenuShown) {
+                contextMenu.removeMenu(clipboardMenu);
+                clipboardMenuShown = false;
+            }
+        }
+        onAboutToHide: {
+            if (clipboardMenuShown) {
+                contextMenu.removeMenu(clipboardMenu);
+                clipboardMenuShown = false;
+            }
+            if (newDocumentShown) {
+                contextMenu.removeMenu(newDocumentMenu);
+                newDocumentShown = false;
+            }
         }
 
         MenuItem {
@@ -1755,6 +1783,12 @@ Window {
         }
 
         MenuItem {
+            text: qsTr("Open in Root")
+            enabled: contextMenu.terminalDir !== ""
+            onTriggered: Platform.openTerminalAsRoot(contextMenu.terminalDir)
+        }
+
+        MenuItem {
             text: qsTr("Open in New Tab")
             enabled: root.currentTab && root.currentTab.selectionCount === 1
             onTriggered: {
@@ -1764,59 +1798,30 @@ Window {
             }
         }
 
-        MenuItem {
-            text: contextMenu.folderBookmarked ? qsTr("Remove Bookmark") : qsTr("Bookmark This Folder")
-            enabled: root.folderBookmarkable
-            onTriggered: root.toggleBookmark()
-        }
-
-        MenuItem {
-            // Nautilus's star toggle: Star when anything in the selection is
-            // unstarred, Unstar only when the whole selection is starred.
-            text: contextMenu.selectionStarred ? qsTr("Unstar") : qsTr("Star")
-            // Local folders, the Starred view itself and Recent (paths in
-            // both resolve to the real files); trash rows have nothing to pin.
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-                     && (Platform.isLocal(root.currentTab.path)
-                         || root.currentTab.path === "starred:///"
-                         || root.viewingRecent)
-            onTriggered: {
-                if (contextMenu.selectionStarred)
-                    StarredStore.unstar(contextMenu.actionPaths);
-                else
-                    StarredStore.star(contextMenu.actionPaths);
-            }
-        }
-
         MenuSeparator {}
 
         MenuItem {
-            text: qsTr("Cut")
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-            onTriggered: Clipboard.cutFiles(root.selection())
-        }
-
-        MenuItem {
-            text: qsTr("Copy")
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-            onTriggered: Clipboard.copyFiles(root.selection())
-        }
-
-        MenuItem {
-            text: qsTr("Paste")
-            enabled: Clipboard.hasFiles && root.viewWritable
-            onTriggered: root.paste()
-        }
-
-        MenuItem {
-            // Nautilus's optional Create Link action — hidden until the
-            // preference turns it on.
-            text: qsTr("Create Link")
-            visible: Settings.showCreateLink
+            text: qsTr("Move to Trash")
+            visible: !root.viewingTrash
             height: visible ? implicitHeight : 0
             enabled: root.currentTab && root.currentTab.selectionCount > 0
-                     && root.currentTab.batchRenamable && Platform.isLocal(root.currentTab.path)
-            onTriggered: FileOperations.createLink(root.selection(), root.currentTab.path)
+            onTriggered: root.trashSelected()
+        }
+
+        MenuItem {
+            text: qsTr("Delete Permanently…")
+            visible: root.viewingTrash || Settings.showDeletePermanently
+            height: visible ? implicitHeight : 0
+            enabled: root.currentTab && root.currentTab.selectionCount > 0
+            onTriggered: root.deleteSelected()
+        }
+
+        MenuItem {
+            text: qsTr("Rename…")
+            enabled: root.currentTab && !root.viewingRecent
+                     && (root.currentTab.selectionCount === 1
+                     || (root.currentTab.selectionCount > 1 && root.currentTab.batchRenamable))
+            onTriggered: root.renameSelected()
         }
 
         MenuSeparator {}
@@ -1825,17 +1830,6 @@ Window {
             text: qsTr("New Folder")
             enabled: root.viewWritable
             onTriggered: root.newFolder()
-        }
-
-        MenuItem {
-            text: qsTr("Rename…")
-            // One item renames inline; several open batch rename, which
-            // needs a real directory under it. Recent rows are pointers —
-            // nothing there is renamable.
-            enabled: root.currentTab && !root.viewingRecent
-                     && (root.currentTab.selectionCount === 1
-                     || (root.currentTab.selectionCount > 1 && root.currentTab.batchRenamable))
-            onTriggered: root.renameSelected()
         }
 
         MenuItem {
@@ -1860,9 +1854,37 @@ Window {
         }
 
         MenuItem {
-            // Nautilus's label for dropping a server from the known list.
-            // Only for remembered servers — a discovered or mounted row has
-            // nothing here to forget.
+            text: qsTr("Create Link")
+            visible: Settings.showCreateLink
+            height: visible ? implicitHeight : 0
+            enabled: root.currentTab && root.currentTab.selectionCount > 0
+                     && root.currentTab.batchRenamable && Platform.isLocal(root.currentTab.path)
+            onTriggered: FileOperations.createLink(root.selection(), root.currentTab.path)
+        }
+
+        MenuItem {
+            text: contextMenu.folderBookmarked ? qsTr("Remove Bookmark") : qsTr("Bookmark This Folder")
+            enabled: root.folderBookmarkable
+            onTriggered: root.toggleBookmark()
+        }
+
+        MenuItem {
+            text: contextMenu.selectionStarred ? qsTr("Unstar") : qsTr("Star")
+            enabled: root.currentTab && root.currentTab.selectionCount > 0
+                     && (Platform.isLocal(root.currentTab.path)
+                         || root.currentTab.path === "starred:///"
+                         || root.viewingRecent)
+            onTriggered: {
+                if (contextMenu.selectionStarred)
+                    StarredStore.unstar(contextMenu.actionPaths);
+                else
+                    StarredStore.star(contextMenu.actionPaths);
+            }
+        }
+
+        MenuSeparator {}
+
+        MenuItem {
             text: qsTr("Forget Connection")
             visible: root.viewingNetwork
             height: visible ? implicitHeight : 0
@@ -1884,25 +1906,6 @@ Window {
             height: visible ? implicitHeight : 0
             enabled: root.visibleCount > 0
             onTriggered: emptyTrashConfirm.open()
-        }
-
-        MenuItem {
-            text: qsTr("Move to Trash")
-            visible: !root.viewingTrash
-            height: visible ? implicitHeight : 0
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-            onTriggered: root.trashSelected()
-        }
-
-        MenuItem {
-            text: qsTr("Delete Permanently…")
-            // Nautilus hides this behind a preference — except in the trash,
-            // where permanent delete is the only kind there is. Shift+Delete
-            // works regardless, as the preference dialog says.
-            visible: root.viewingTrash || Settings.showDeletePermanently
-            height: visible ? implicitHeight : 0
-            enabled: root.currentTab && root.currentTab.selectionCount > 0
-            onTriggered: root.deleteSelected()
         }
 
         MenuSeparator {}
@@ -1943,6 +1946,30 @@ Window {
             }
             onObjectAdded: (index, object) => contextMenu.addItem(object)
             onObjectRemoved: (index, object) => contextMenu.removeItem(object)
+        }
+    }
+
+    // Clipboard submenu — Vágás, Másolás, Beillesztés csoportosítva a
+    // Windows 11-es menü mintájára. Ugyanúgy mint a newDocumentMenu,
+    // dinamikusan illeszthető be / távolítható el.
+    Menu {
+        id: clipboardMenu
+        title: qsTr("Clipboard")
+
+        MenuItem {
+            text: qsTr("Cut")
+            enabled: root.currentTab && root.currentTab.selectionCount > 0
+            onTriggered: Clipboard.cutFiles(root.selection())
+        }
+        MenuItem {
+            text: qsTr("Copy")
+            enabled: root.currentTab && root.currentTab.selectionCount > 0
+            onTriggered: Clipboard.copyFiles(root.selection())
+        }
+        MenuItem {
+            text: qsTr("Paste")
+            enabled: Clipboard.hasFiles && root.viewWritable
+            onTriggered: root.paste()
         }
     }
 

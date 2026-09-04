@@ -89,6 +89,7 @@ public:
     // the xdg-terminal-exec convention rather than naming a terminal, so this
     // keeps working whatever the user has installed.
     Q_INVOKABLE bool openTerminal(const QString &directory) const;
+    Q_INVOKABLE bool openTerminalAsRoot(const QString &directory) const;
 
     // Turns whatever the user typed into an absolute path: expands a leading
     // ~, and resolves a relative path against the folder being viewed.

@@ -59,6 +59,12 @@ class Settings : public QObject
     // text and controls opaque. 1 = solid, floor 0.5 keeps content readable.
     Q_PROPERTY(qreal backgroundOpacity READ backgroundOpacity WRITE setBackgroundOpacity NOTIFY changed)
 
+    // View state persisted across sessions
+    Q_PROPERTY(bool showHidden READ showHidden WRITE setShowHidden NOTIFY changed)
+    Q_PROPERTY(int zoom READ zoom WRITE setZoom NOTIFY changed)
+    Q_PROPERTY(int sortKey READ sortKey WRITE setSortKey NOTIFY changed)
+    Q_PROPERTY(bool sortDescending READ sortDescending WRITE setSortDescending NOTIFY changed)
+
 public:
     explicit Settings(QObject *parent = nullptr);
 
@@ -76,6 +82,10 @@ public:
     QStringList listVisibleColumns() const;
     QStringList iconCaptions() const;
     qreal backgroundOpacity() const { return realFor("backgroundOpacity", 1.0, 0.5, 1.0); }
+    bool showHidden() const { return boolFor("showHidden", false); }
+    int zoom() const { return intFor("zoom", 64, 16, 512); }
+    int sortKey() const { return intFor("sortKey", 0, 0, 8); }
+    bool sortDescending() const { return boolFor("sortDescending", false); }
 
     // Every column id, canonical order. The QML layer owns labels and widths.
     Q_INVOKABLE static QStringList allListColumns();
@@ -96,6 +106,10 @@ public:
     void setListVisibleColumns(const QStringList &value) { set("listVisibleColumns", value.join(QLatin1Char(','))); }
     void setIconCaptions(const QStringList &value) { set("iconCaptions", value.join(QLatin1Char(','))); }
     void setBackgroundOpacity(qreal value) { set("backgroundOpacity", QString::number(value, 'f', 2)); }
+    void setShowHidden(bool value) { set("showHidden", value ? "true" : "false"); }
+    void setZoom(int value) { set("zoom", QString::number(value)); }
+    void setSortKey(int value) { set("sortKey", QString::number(value)); }
+    void setSortDescending(bool value) { set("sortDescending", value ? "true" : "false"); }
 
 Q_SIGNALS:
     // One signal for the lot: preference flips are rare and every consumer
@@ -114,6 +128,7 @@ private:
     QStringList columnListFor(const char *key, const QStringList &fallback) const;
     // A number inside [min, max]; anything else falls back to the default.
     qreal realFor(const char *key, qreal fallback, qreal min, qreal max) const;
+    int intFor(const char *key, int fallback, int min = 0, int max = 9999) const;
 
     QHash<QString, QString> m_values;
     QFileSystemWatcher *m_watcher = nullptr;

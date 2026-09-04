@@ -216,6 +216,39 @@ bool Platform::openTerminal(const QString &directory) const
     return false;
 }
 
+bool Platform::openTerminalAsRoot(const QString &directory) const
+{
+    if (!Location::isLocal(directory))
+        return false;
+
+    // Find the user's preferred terminal, then launch it via pkexec.
+    QString program;
+    if (const QString configured = qEnvironmentVariable("TERMINAL"); !configured.isEmpty())
+        program = QStandardPaths::findExecutable(configured);
+    if (program.isEmpty())
+        program = QStandardPaths::findExecutable(QStringLiteral("xdg-terminal-exec"));
+    if (program.isEmpty())
+        program = QStandardPaths::findExecutable(QStringLiteral("x-terminal-emulator"));
+    if (program.isEmpty())
+        program = QStandardPaths::findExecutable(QStringLiteral("alacritty"));
+    if (program.isEmpty())
+        program = QStandardPaths::findExecutable(QStringLiteral("foot"));
+    if (program.isEmpty()) {
+        qWarning("omafiles: no terminal found for root launch");
+        return false;
+    }
+
+    // pkexec does not inherit the user's working directory, so we wrap
+    // the command in sh -c to cd first. The full path to the terminal is
+    // used because pkexec runs with a minimal PATH.
+    const QString shellCmd = QStringLiteral("cd '%1' && '%2'").arg(
+        QDir::toNativeSeparators(directory), program);
+    return QProcess::startDetached(QStringLiteral("pkexec"),
+                                   QStringList() << QStringLiteral("sh")
+                                                 << QStringLiteral("-c")
+                                                 << shellCmd);
+}
+
 QString Platform::resolvePath(const QString &input, const QString &base) const
 {
     QString path = input.trimmed();

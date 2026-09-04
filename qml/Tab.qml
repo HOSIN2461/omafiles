@@ -56,10 +56,14 @@ FocusScope {
     // View state. The default follows the Settings store, which switching
     // views writes back — Nautilus's default-folder-viewer behaviour.
     property string viewMode: Settings.defaultViewMode
-    property int zoom: 64
-    property bool showHidden: false
-    property int sortKey: FileSortFilterModel.ByName
-    property bool sortDescending: false
+    property int zoom: Settings.zoom
+        onZoomChanged: Settings.zoom = zoom
+    property bool showHidden: Settings.showHidden
+        onShowHiddenChanged: Settings.showHidden = showHidden
+    property int sortKey: Settings.sortKey
+        onSortKeyChanged: Settings.sortKey = sortKey
+    property bool sortDescending: Settings.sortDescending
+        onSortDescendingChanged: Settings.sortDescending = sortDescending
 
     // Selection is a plain set keyed by filename. Names are stable within a
     // directory, so a selection survives re-sorting and in-place model updates

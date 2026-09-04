@@ -111,6 +111,15 @@ qreal Settings::realFor(const char *key, qreal fallback, qreal min, qreal max) c
     return value;
 }
 
+int Settings::intFor(const char *key, int fallback, int min, int max) const
+{
+    bool ok = false;
+    const int value = m_values.value(QLatin1String(key)).toInt(&ok);
+    if (!ok || value < min || value > max)
+        return fallback;
+    return value;
+}
+
 QStringList Settings::allListColumns()
 {
     // Canonical order, Nautilus's default-column-order pared to the columns
