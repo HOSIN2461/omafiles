@@ -556,6 +556,19 @@ Window {
                         color: index === stack.currentIndex ? Colors.window
                              : tabMouse.containsMouse ? Colors.hover : "transparent"
 
+                        MouseArea {
+                            id: tabMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                            onClicked: mouse => {
+                                if (mouse.button === Qt.MiddleButton)
+                                    root.closeTab(index);
+                                else
+                                    stack.currentIndex = index;
+                            }
+                        }
+
                         Text {
                             textFormat: Text.PlainText
                             anchors.left: parent.left
@@ -584,20 +597,8 @@ Window {
                                 anchors.fill: parent
                                 anchors.margins: -4
                                 hoverEnabled: true
+                                z: 1
                                 onClicked: root.closeTab(index)
-                            }
-                        }
-
-                        MouseArea {
-                            id: tabMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            acceptedButtons: Qt.LeftButton | Qt.MiddleButton
-                            onClicked: mouse => {
-                                if (mouse.button === Qt.MiddleButton)
-                                    root.closeTab(index);
-                                else
-                                    stack.currentIndex = index;
                             }
                         }
                     }
