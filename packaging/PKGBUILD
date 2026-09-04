@@ -14,7 +14,7 @@ arch=('x86_64')
 url="https://github.com/HOSIN2461/omafiles"
 license=('MIT')
 install="$pkgname.install"
-depends=('qt6-base' 'qt6-declarative' 'glib2' 'gvfs' 'hicolor-icon-theme'
+depends=('qt6-base' 'qt6-declarative' 'qt6-multimedia' 'glib2' 'gvfs' 'hicolor-icon-theme'
          'libarchive' 'tinysparql')
 optdepends=('gvfs-smb: smb:// megosztások böngészése'
             'gvfs-mtp: telefonok MTP-n keresztül'

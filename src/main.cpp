@@ -10,6 +10,7 @@
 #include "Platform.h"
 #include "SystemTheme.h"
 #include "ThumbnailProvider.h"
+#include "UpdateChecker.h"
 
 #include <QCommandLineOption>
 #include <QCommandLineParser>
@@ -22,6 +23,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QTimer>
 #include <QTranslator>
 #include <QUrl>
 
@@ -137,6 +139,7 @@ int main(int argc, char *argv[])
     Application application(&engine);
     Platform platform;
     SystemTheme systemTheme;
+    UpdateChecker updateChecker;
 
     // Registered under their own URI, never into "Omafiles". Mixing manual
     // registrations into a URI owned by qt_add_qml_module is unsupported, and
@@ -145,6 +148,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "App", &application);
     qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "Platform", &platform);
     qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "Theme", &systemTheme);
+    qmlRegisterSingletonInstance("Omafiles.Runtime", 1, 0, "UpdateChecker", &updateChecker);
 
     if (isPrimary) {
         new OmantaAdaptor(&application);
@@ -162,6 +166,9 @@ int main(int argc, char *argv[])
                          "(Nautilus running?) — not claiming it\n");
         }
     }
+
+    // Check for updates after a short delay (3 seconds)
+    QTimer::singleShot(3000, &updateChecker, &UpdateChecker::checkForUpdates);
 
     // Windows are created rather than loaded, so the same code path serves the
     // first launch and every later D-Bus request.

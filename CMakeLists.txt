@@ -4,7 +4,7 @@ project(omafiles VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 DBus Svg LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 DBus Svg Network LinguistTools)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 pkg_check_modules(LIBARCHIVE REQUIRED IMPORTED_TARGET libarchive)
@@ -69,6 +69,8 @@ qt_add_executable(omafiles
     src/ThumbnailProvider.h
     src/SystemTheme.cpp
     src/SystemTheme.h
+    src/UpdateChecker.cpp
+    src/UpdateChecker.h
     src/UserActions.cpp
     src/UserActions.h
 )
@@ -100,6 +102,7 @@ qt_add_qml_module(omafiles
         qml/ConflictDialog.qml
         qml/CredentialDialog.qml
         qml/PropertiesDialog.qml
+        qml/UpdateDialog.qml
         qml/Colors.qml
 )
 
@@ -120,6 +123,7 @@ target_link_libraries(omafiles PRIVATE
     Qt6::QuickControls2
     Qt6::DBus
     Qt6::Svg
+    Qt6::Network
     PkgConfig::GIO
     PkgConfig::LIBARCHIVE
     PkgConfig::TINYSPARQL

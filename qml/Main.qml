@@ -1328,6 +1328,13 @@ Window {
             text: qsTr("About Files")
             onTriggered: aboutDialog.open()
         }
+
+        MenuSeparator {}
+
+        MenuItem {
+            text: qsTr("Check for Updates")
+            onTriggered: UpdateChecker.checkForUpdates()
+        }
     }
 
     PreferencesDialog {
@@ -1348,6 +1355,53 @@ Window {
     VisibleColumnsDialog {
         id: visibleColumnsDialog
         onClosed: root.returnFocusToView()
+    }
+
+    UpdateDialog {
+        id: updateDialog
+        updateChecker: UpdateChecker
+        onClosed: root.returnFocusToView()
+    }
+
+    // ---- update notification banner ----------------------------------------
+
+    Rectangle {
+        id: updateBanner
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: updateBanner.visible ? 36 : 0
+        color: Colors.selection
+        visible: UpdateChecker.updateAvailable
+        z: 100
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            spacing: 8
+
+            Text {
+                textFormat: Text.PlainText
+                Layout.fillWidth: true
+                text: qsTr("Új verzió elérhető: %1").arg(UpdateChecker.latestVersion)
+                color: Colors.selectionText
+                font.pixelSize: 13
+                elide: Text.ElideRight
+            }
+
+            Button {
+                text: qsTr("Frissítés")
+                flat: true
+                onClicked: updateDialog.open()
+            }
+
+            Button {
+                text: qsTr("✕")
+                flat: true
+                onClicked: updateBanner.visible = false
+            }
+        }
     }
 
     // ---- view options menu ------------------------------------------------
