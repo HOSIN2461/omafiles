@@ -7,7 +7,7 @@
 #     "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"; }
 
 pkgname=omafiles
-pkgver=0.4.9
+pkgver=0.4.10
 pkgrel=1
 pkgdesc="Magyar fájlkezelő Omarchy-hoz (Qt Quick + GIO)"
 arch=('x86_64')

@@ -506,7 +506,7 @@ Window {
                     id: viewOptionsButton
                     symbol: "▼"
                     symbolSize: 12
-                    tip: "View options"
+                    tip: qsTr("View options")
                     onTriggered: viewOptionsMenu.popup(viewOptionsButton, 0, viewOptionsButton.height)
                 }
 
@@ -524,7 +524,7 @@ Window {
                 ToolbarButton {
                     symbol: "✕"
                     symbolSize: 13
-                    tip: "Close window (Ctrl+Shift+W)"
+                    tip: qsTr("Close window (Ctrl+Shift+W)")
                     onTriggered: root.close()
                 }
             }
