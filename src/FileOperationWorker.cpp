@@ -349,7 +349,7 @@ bool FileOperationWorker::doBatchRename(const FileOperationRequest &request,
             if (request.names.at(i) == oldNames.at(i))
                 continue; // already right; renaming would be a pointless failure risk
             const QString target = phase == 0
-                ? QStringLiteral(".omanta-batch-%1-%2").arg(id).arg(i)
+                ? QStringLiteral(".omafiles-batch-%1-%2").arg(id).arg(i)
                 : request.names.at(i);
             if (!renameTo(i, target)) {
                 if (!rollback())

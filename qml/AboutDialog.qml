@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Omafiles.Runtime
 
-// About Files — the hamburger menu's last entry, omacalc-flat.
+// About Files — the hamburger menu's last entry.
 Dialog {
     id: root
 
@@ -35,7 +35,7 @@ Dialog {
         Text {
             textFormat: Text.PlainText
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "omanta " + Qt.application.version
+            text: "omafiles " + Qt.application.version
             color: Colors.textDim
             font.pixelSize: 12
         }

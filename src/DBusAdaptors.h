@@ -6,12 +6,12 @@
 
 class Application;
 
-// omanta' own interface, used only for single-instance handoff: a second
+// omafiles' own interface, used only for single-instance handoff: a second
 // launch forwards its argv here and exits rather than starting a process.
 class OmantaAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.omarchy.omanta")
+    Q_CLASSINFO("D-Bus Interface", "org.omarchy.omafiles")
 
     // Exported so the window model can be asserted on from outside the
     // process — a multi-window app that cannot be inspected cannot be tested.
@@ -38,7 +38,7 @@ private:
 // The freedesktop standard every "Show in file manager" / "Open containing
 // folder" button in the desktop ends up calling — browsers, Electron apps and
 // xdg-desktop-portal's OpenDirectory all route here. Nautilus owns this name
-// today; omanta claims it only when it is free, so both can be installed at
+// today; omafiles claims it only when it is free, so both can be installed at
 // once during testing.
 class FileManager1Adaptor : public QDBusAbstractAdaptor
 {

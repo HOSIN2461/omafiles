@@ -339,7 +339,7 @@ bool extract(const QString &archivePath, const QString &destinationDir, QString 
     // hostile archive leaves nothing visible behind, and the landing rule can
     // look at what actually came out rather than trusting the entry list.
     const QString staging = QDir(destinationDir)
-        .filePath(QStringLiteral(".omanta-extract-%1").arg(quintptr(reader), 0, 16));
+        .filePath(QStringLiteral(".omafiles-extract-%1").arg(quintptr(reader), 0, 16));
     if (!QDir().mkpath(staging)) {
         *error = QStringLiteral("Could not write to “%1”")
             .arg(QFileInfo(destinationDir).fileName());

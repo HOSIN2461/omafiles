@@ -33,10 +33,10 @@ Settings::Settings(QObject *parent)
 
 QString Settings::filePath() const
 {
-    const QString override = qEnvironmentVariable("OMANTA_SETTINGS_FILE");
+    const QString override = qEnvironmentVariable("OMAFILES_SETTINGS_FILE");
     if (!override.isEmpty())
         return override;
-    return QDir::homePath() + QStringLiteral("/.config/omanta/settings");
+    return QDir::homePath() + QStringLiteral("/.config/omafiles/settings");
 }
 
 void Settings::load()

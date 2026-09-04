@@ -64,7 +64,7 @@ bool Platform::activationExtracts(const QString &contentType) const
     if (!info)
         return false;
     const char *id = g_app_info_get_id(info);
-    const bool self = id && g_str_equal(id, "omanta.desktop");
+    const bool self = id && g_str_equal(id, "omafiles.desktop");
     g_object_unref(info);
     return self;
 }

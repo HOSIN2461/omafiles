@@ -35,10 +35,10 @@ StarredStore::StarredStore(QObject *parent)
 
 QString StarredStore::filePath() const
 {
-    const QString override = qEnvironmentVariable("OMANTA_STARRED_FILE");
+    const QString override = qEnvironmentVariable("OMAFILES_STARRED_FILE");
     if (!override.isEmpty())
         return override;
-    return QDir::homePath() + QStringLiteral("/.config/omanta/starred");
+    return QDir::homePath() + QStringLiteral("/.config/omafiles/starred");
 }
 
 void StarredStore::load()
