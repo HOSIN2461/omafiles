@@ -83,12 +83,12 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName(QStringLiteral("Omafiles"));
     app.setOrganizationDomain(QStringLiteral("omarchy.org"));
     app.setDesktopFileName(QStringLiteral("omafiles"));
-    app.setApplicationVersion(QStringLiteral("0.4.1"));
+    app.setApplicationVersion(QStringLiteral("0.4.2"));
 
     // --- Load translation (pre-compiled Hungarian .qm, embedded via resources) ---
     if (QLocale::system().language() == QLocale::Hungarian) {
         QTranslator *translator = new QTranslator(&app);
-        if (translator->load(QStringLiteral(":/translations/translations/omafiles_hu.qm")))
+        if (translator->load(QStringLiteral(":/translations/translations/hu.qm")))
             app.installTranslator(translator);
         else
             delete translator;

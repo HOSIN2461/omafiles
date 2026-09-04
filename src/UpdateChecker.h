@@ -49,5 +49,5 @@ private:
     QString m_errorMessage;
 
     static constexpr const char *kRepoUrl = "https://api.github.com/repos/HOSIN2461/omafiles";
-    static constexpr const char *kCurrentVersion = "0.4.1";
+    static constexpr const char *kCurrentVersion = "0.4.2";
 };
