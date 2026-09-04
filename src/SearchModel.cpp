@@ -96,11 +96,17 @@ QVariant SearchModel::data(const QModelIndex &index, int role) const
     case DirectoryModel::IsSymlinkRole: return result.entry.isSymlink;
     case DirectoryModel::SizeRole: return result.entry.size;
     case DirectoryModel::ModifiedRole: return result.entry.modified;
+    case DirectoryModel::CreatedRole: return result.entry.created;
+    case DirectoryModel::AccessedRole: return result.entry.accessed;
+    case DirectoryModel::OwnerRole: return result.entry.owner;
+    case DirectoryModel::GroupRole: return result.entry.group;
+    case DirectoryModel::PermissionsRole: return result.entry.permissionString();
     case DirectoryModel::ContentTypeRole: return result.entry.contentType;
     case DirectoryModel::TypeDescriptionRole: return result.entry.typeDescription;
     case DirectoryModel::IconSourceRole:
         return QStringLiteral("image://fileicon/") + result.entry.iconNames.join(QLatin1Char(','));
     case DirectoryModel::OrigPathRole: return result.entry.origPath;
+    case DirectoryModel::TargetPathRole: return result.entry.targetPath;
     case DirectoryModel::ItemCountRole: return result.entry.itemCount;
     case DirectoryModel::ItemCountAllRole: return result.entry.itemCountAll;
     case DirectoryModel::DepthRole: return 0;
@@ -123,10 +129,16 @@ QHash<int, QByteArray> SearchModel::roleNames() const
         { DirectoryModel::IsSymlinkRole, "isSymlink" },
         { DirectoryModel::SizeRole, "size" },
         { DirectoryModel::ModifiedRole, "modified" },
+        { DirectoryModel::CreatedRole, "created" },
+        { DirectoryModel::AccessedRole, "accessed" },
+        { DirectoryModel::OwnerRole, "owner" },
+        { DirectoryModel::GroupRole, "group" },
+        { DirectoryModel::PermissionsRole, "permissions" },
         { DirectoryModel::ContentTypeRole, "contentType" },
         { DirectoryModel::TypeDescriptionRole, "typeDescription" },
         { DirectoryModel::IconSourceRole, "iconSource" },
         { DirectoryModel::OrigPathRole, "origPath" },
+        { DirectoryModel::TargetPathRole, "targetPath" },
         { DirectoryModel::ItemCountRole, "itemCount" },
         { DirectoryModel::ItemCountAllRole, "itemCountAll" },
         { DirectoryModel::DepthRole, "depth" },
@@ -385,7 +397,7 @@ void SearchModel::startContentSearch()
     // The index speaks file:// only — content search over trash:// or a
     // mount would return nothing however it was asked.
     if (!Location::isLocal(m_root)) {
-        setUnavailable(QStringLiteral("Content search works in local folders only"));
+        setUnavailable(tr("Content search works in local folders only"));
         setSearching(false);
         return;
     }
@@ -395,7 +407,7 @@ void SearchModel::startContentSearch()
     }
 
     if (m_sparqlFailed) {
-        setUnavailable(QStringLiteral("Content search is unavailable — no search index"));
+        setUnavailable(tr("Content search is unavailable — no search index"));
         setSearching(false);
         return;
     }
@@ -436,7 +448,7 @@ void SearchModel::onConnectionReady(GObject *, GAsyncResult *res, gpointer data)
         g_clear_error(&error);
         self->m_sparqlFailed = true;
         if (self->m_searching && self->m_contentMode) {
-            self->setUnavailable(QStringLiteral("Content search is unavailable — no search index"));
+            self->setUnavailable(tr("Content search is unavailable — no search index"));
             self->setSearching(false);
         }
         return;
@@ -456,7 +468,7 @@ void SearchModel::executeContentQuery()
         tracker_sparql_connection_query_statement(m_sparql, kFtsQuery, nullptr, &error);
     if (!stmt) {
         g_clear_error(&error);
-        setUnavailable(QStringLiteral("Content search is unavailable — no search index"));
+        setUnavailable(tr("Content search is unavailable — no search index"));
         setSearching(false);
         return;
     }
@@ -498,7 +510,7 @@ void SearchModel::onQueryReady(GObject *source, GAsyncResult *res, gpointer data
 
     if (!cursor) {
         g_clear_error(&error);
-        self->setUnavailable(QStringLiteral("Content search is unavailable — no search index"));
+        self->setUnavailable(tr("Content search is unavailable — no search index"));
         self->setSearching(false);
         delete ctx;
         return;

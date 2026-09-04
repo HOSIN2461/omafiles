@@ -278,10 +278,10 @@ void DirectoryModel::onEnumerateReady(GObject *source, GAsyncResult *res, gpoint
 
     if (!enumerator) {
         if (g_error_matches(error, G_IO_ERROR, G_IO_ERROR_NOT_MOUNTED)) {
-            model->setErrorMessage(QStringLiteral("Mounting…"));
+            model->setErrorMessage(tr("Mounting…"));
             Q_EMIT model->needsMount(model->m_path);
         } else if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-            model->setErrorMessage(QString::fromUtf8(error ? error->message : "Could not open folder"));
+            model->setErrorMessage(error && error->message ? QString::fromUtf8(error->message) : tr("Could not open folder"));
         }
         g_clear_error(&error);
         model->setLoading(false);

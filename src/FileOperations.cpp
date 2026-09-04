@@ -10,47 +10,47 @@ QString FileOperationRequest::describe() const
 {
     const int count = sources.size();
     const QString what = count == 1 ? QFileInfo(sources.first()).fileName()
-                                    : QStringLiteral("%1 items").arg(count);
+                                    : FileOperations::tr("%1 items").arg(count);
     switch (kind) {
-    case CreateFolder: return QStringLiteral("Create “%1”").arg(sources.value(0));
-    case Rename: return QStringLiteral("Rename to “%1”").arg(destination);
-    case BatchRename: return QStringLiteral("Rename %1").arg(what);
-    case Compress: return QStringLiteral("Compress %1").arg(what);
-    case Extract: return QStringLiteral("Extract %1").arg(what);
-    case CreateLink: return QStringLiteral("Link %1").arg(what);
-    case Trash: return QStringLiteral("Move %1 to trash").arg(what);
-    case RestoreFromTrash: return QStringLiteral("Restore %1").arg(what);
-    case Copy: return QStringLiteral("Copy %1").arg(what);
-    case Move: return QStringLiteral("Move %1").arg(what);
-    case DeletePermanently: return QStringLiteral("Delete %1").arg(what);
-    case EmptyTrash: return QStringLiteral("Empty the trash");
-    case RemoveCreatedFolder: return QStringLiteral("Remove %1").arg(what);
+    case CreateFolder: return FileOperations::tr("Create “%1”").arg(sources.value(0));
+    case Rename: return FileOperations::tr("Rename to “%1”").arg(destination);
+    case BatchRename: return FileOperations::tr("Rename %1").arg(what);
+    case Compress: return FileOperations::tr("Compress %1").arg(what);
+    case Extract: return FileOperations::tr("Extract %1").arg(what);
+    case CreateLink: return FileOperations::tr("Link %1").arg(what);
+    case Trash: return FileOperations::tr("Move %1 to trash").arg(what);
+    case RestoreFromTrash: return FileOperations::tr("Restore %1").arg(what);
+    case Copy: return FileOperations::tr("Copy %1").arg(what);
+    case Move: return FileOperations::tr("Move %1").arg(what);
+    case DeletePermanently: return FileOperations::tr("Delete %1").arg(what);
+    case EmptyTrash: return FileOperations::tr("Empty the trash");
+    case RemoveCreatedFolder: return FileOperations::tr("Remove %1").arg(what);
     }
-    return QStringLiteral("Operation");
+    return FileOperations::tr("Operation");
 }
 
 QString FileOperationRequest::shortStatus() const
 {
     const int count = sources.size();
     const QString what = count == 1
-        ? QStringLiteral("“%1”").arg(QFileInfo(sources.first()).fileName())
-        : QStringLiteral("%1 files").arg(count);
+        ? FileOperations::tr("“%1”").arg(QFileInfo(sources.first()).fileName())
+        : FileOperations::tr("%1 files").arg(count);
     switch (kind) {
-    case CreateFolder: return QStringLiteral("Creating “%1”").arg(sources.value(0));
-    case Rename: return QStringLiteral("Renaming to “%1”").arg(destination);
-    case BatchRename: return QStringLiteral("Renaming %1").arg(what);
-    case Compress: return QStringLiteral("Compressing %1").arg(what);
-    case Extract: return QStringLiteral("Extracting %1").arg(what);
-    case CreateLink: return QStringLiteral("Linking %1").arg(what);
-    case Trash: return QStringLiteral("Moving %1 to trash").arg(what);
-    case RestoreFromTrash: return QStringLiteral("Restoring %1").arg(what);
-    case Copy: return QStringLiteral("Copying %1").arg(what);
-    case Move: return QStringLiteral("Moving %1").arg(what);
-    case DeletePermanently: return QStringLiteral("Deleting %1").arg(what);
-    case EmptyTrash: return QStringLiteral("Emptying the trash");
-    case RemoveCreatedFolder: return QStringLiteral("Removing %1").arg(what);
+    case CreateFolder: return FileOperations::tr("Creating “%1”").arg(sources.value(0));
+    case Rename: return FileOperations::tr("Renaming to “%1”").arg(destination);
+    case BatchRename: return FileOperations::tr("Renaming %1").arg(what);
+    case Compress: return FileOperations::tr("Compressing %1").arg(what);
+    case Extract: return FileOperations::tr("Extracting %1").arg(what);
+    case CreateLink: return FileOperations::tr("Linking %1").arg(what);
+    case Trash: return FileOperations::tr("Moving %1 to trash").arg(what);
+    case RestoreFromTrash: return FileOperations::tr("Restoring %1").arg(what);
+    case Copy: return FileOperations::tr("Copying %1").arg(what);
+    case Move: return FileOperations::tr("Moving %1").arg(what);
+    case DeletePermanently: return FileOperations::tr("Deleting %1").arg(what);
+    case EmptyTrash: return FileOperations::tr("Emptying the trash");
+    case RemoveCreatedFolder: return FileOperations::tr("Removing %1").arg(what);
     }
-    return QStringLiteral("Working");
+    return FileOperations::tr("Working");
 }
 
 FileOperations::FileOperations(QObject *parent)
@@ -184,13 +184,13 @@ QString FileOperations::transferredText(qint64 done, qint64 total, qint64 elapse
     // must agree with the ones in the Size column, which come from GLib.
     const QLocale locale;
     const auto fmt = QLocale::DataSizeSIFormat;
-    QString text = QStringLiteral("%1 / %2")
+    QString text = FileOperations::tr("%1 / %2")
                        .arg(locale.formattedDataSize(done, 1, fmt),
                             locale.formattedDataSize(total, 1, fmt));
     if (elapsedMs >= 1500 && done < total) {
         const qint64 perSecond = qint64(double(done) * 1000.0 / double(elapsedMs));
         if (perSecond > 0)
-            text += QStringLiteral(" (%1/s)").arg(locale.formattedDataSize(perSecond, 1, fmt));
+            text += FileOperations::tr(" (%1/s)").arg(locale.formattedDataSize(perSecond, 1, fmt));
     }
     return text;
 }
@@ -204,10 +204,10 @@ QString FileOperations::remainingText(qint64 done, qint64 total, qint64 elapsedM
     const double rate = double(done) / double(elapsedMs); // bytes per ms
     const qint64 secondsLeft = qint64((double(total - done) / rate) / 1000.0) + 1;
     if (secondsLeft < 5)
-        return QStringLiteral("A few seconds left");
+        return FileOperations::tr("A few seconds left");
     if (secondsLeft < 90)
-        return QStringLiteral("About %1 seconds left").arg(secondsLeft);
-    return QStringLiteral("About %1 minutes left").arg((secondsLeft + 59) / 60);
+        return FileOperations::tr("About %1 seconds left").arg(secondsLeft);
+    return FileOperations::tr("About %1 minutes left").arg((secondsLeft + 59) / 60);
 }
 
 void FileOperations::cancelOperation(double id)
@@ -469,7 +469,7 @@ void FileOperations::createFolder(const QString &parentDir, const QString &name)
 void FileOperations::rename(const QString &path, const QString &newName)
 {
     if (newName.isEmpty() || newName.contains(QLatin1Char('/'))) {
-        setError(QStringLiteral("A name cannot be empty or contain “/”"));
+        setError(tr("A name cannot be empty or contain “/”"));
         return;
     }
 
@@ -483,12 +483,12 @@ void FileOperations::rename(const QString &path, const QString &newName)
 void FileOperations::batchRename(const QStringList &paths, const QStringList &newNames)
 {
     if (paths.isEmpty() || paths.size() != newNames.size()) {
-        setError(QStringLiteral("Nothing to rename"));
+        setError(tr("Nothing to rename"));
         return;
     }
     for (const QString &name : newNames) {
         if (name.isEmpty() || name.contains(QLatin1Char('/'))) {
-            setError(QStringLiteral("A name cannot be empty or contain “/”"));
+            setError(tr("A name cannot be empty or contain “/”"));
             return;
         }
     }

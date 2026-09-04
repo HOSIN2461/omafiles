@@ -129,8 +129,8 @@ QString Platform::formatItemCount(int count) const
     if (count < 0)
         return QStringLiteral("—");
     if (count == 1)
-        return QStringLiteral("1 item");
-    return QStringLiteral("%L1 items").arg(count);
+        return tr("1 item");
+    return tr("%L1 items").arg(count);
 }
 
 QString Platform::formatModified(const QDateTime &when, const QString &format) const
@@ -149,12 +149,12 @@ QString Platform::formatModified(const QDateTime &when, const QString &format) c
     // Simple, Nautilus-style: today gets a time, the last week is relative,
     // this year gets a day and month, anything older gets the year too.
     if (when.date() == now.date())
-        return QStringLiteral("Today, %1").arg(locale.toString(when.time(), QLocale::ShortFormat));
+        return tr("Today, %1").arg(locale.toString(when.time(), QLocale::ShortFormat));
     const qint64 daysAgo = when.date().daysTo(now.date());
     if (daysAgo == 1)
-        return QStringLiteral("Yesterday");
+        return tr("Yesterday");
     if (daysAgo > 1 && daysAgo < 7)
-        return QStringLiteral("%1 days ago").arg(daysAgo);
+        return tr("%1 days ago").arg(daysAgo);
     if (when.date().year() == now.date().year())
         return locale.toString(when.date(), QStringLiteral("d MMM"));
     return locale.toString(when.date(), QStringLiteral("d MMM yyyy"));

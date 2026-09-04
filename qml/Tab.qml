@@ -38,16 +38,15 @@ FocusScope {
         if (searchQuery !== "") {
             if (searchModel.unavailableReason)
                 return searchModel.unavailableReason;
-            const found = files.count === 1 ? "1 result" : files.count + " results";
+            const found = files.count === 1 ? qsTr("1 result") : qsTr("%1 results").arg(files.count);
             if (searchModel.searching)
-                return "Searching — " + found + " so far";
-            return searchModel.capped ? found + " (stopped early — narrow the search)"
-                                      : found;
+                return qsTr("Searching — %1 so far").arg(found);
+            return searchModel.capped ? found + qsTr(" (stopped early — narrow the search)") : found;
         }
         if (dirModel.errorMessage)
             return dirModel.errorMessage;
         if (dirModel.loading)
-            return "Loading…";
+            return qsTr("Loading…");
         const total = files.count;
         const items = total === 1 ? qsTr("1 item") : qsTr("%1 items").arg(total);
         return selectionCount > 0

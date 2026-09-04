@@ -11,7 +11,9 @@ namespace {
 
 QString messageOf(GError *error, const char *fallback)
 {
-    return QString::fromUtf8(error && error->message ? error->message : fallback);
+    if (error && error->message)
+        return QString::fromUtf8(error->message);
+    return FileOperationWorker::tr(fallback);
 }
 
 qint64 sizeOf(GFile *file)
@@ -57,8 +59,8 @@ GFile *uniqueChild(GFile *directory, const QString &name)
 
     for (int attempt = 1; attempt < 10000; ++attempt) {
         const QString candidate = attempt == 1
-            ? QStringLiteral("%1 (copy)%2").arg(stem, suffix)
-            : QStringLiteral("%1 (copy %2)%3").arg(stem).arg(attempt).arg(suffix);
+            ? FileOperationWorker::tr("%1 (copy)%2").arg(stem, suffix)
+            : FileOperationWorker::tr("%1 (copy %2)%3").arg(stem).arg(attempt).arg(suffix);
 
         GFile *child = g_file_get_child(directory, candidate.toUtf8().constData());
         if (!exists(child))
@@ -172,14 +174,14 @@ void FileOperationWorker::run(const FileOperationRequest &request, quint64 id)
     else if (m_needsPassphrase)
         Q_EMIT passphraseNeeded(id, m_passphraseArchive);
     else
-        Q_EMIT failed(id, error.isEmpty() ? QStringLiteral("Operation failed") : error);
+        Q_EMIT failed(id, error.isEmpty() ? tr("Operation failed") : error);
 }
 
 bool FileOperationWorker::doCreateFolder(const FileOperationRequest &request,
                                          FileOperationResult &result, QString *error)
 {
     if (request.sources.isEmpty() || request.sources.first().isEmpty()) {
-        *error = QStringLiteral("No folder name given");
+        *error = tr("No folder name given");
         return false;
     }
 
@@ -203,7 +205,7 @@ bool FileOperationWorker::doCreateLink(const FileOperationRequest &request,
                                        FileOperationResult &result, QString *error)
 {
     if (request.sources.isEmpty() || request.destination.isEmpty()) {
-        *error = QStringLiteral("Nothing to link");
+        *error = tr("Nothing to link");
         return false;
     }
 
@@ -211,14 +213,14 @@ bool FileOperationWorker::doCreateLink(const FileOperationRequest &request,
     bool ok = true;
 
     for (const QString &path : request.sources) {
-        const QString name = QStringLiteral("Link to %1").arg(QFileInfo(path).fileName());
+        const QString name = tr("Link to %1").arg(QFileInfo(path).fileName());
         GFile *target = g_file_get_child(directory, name.toUtf8().constData());
         if (exists(target)) {
             g_object_unref(target);
             target = uniqueChild(directory, name);
         }
         if (!target) {
-            *error = QStringLiteral("Could not find a free name for the link");
+            *error = tr("Could not find a free name for the link");
             ok = false;
             break;
         }
@@ -247,7 +249,7 @@ bool FileOperationWorker::doRename(const FileOperationRequest &request,
                                    FileOperationResult &result, QString *error)
 {
     if (request.sources.isEmpty() || request.destination.isEmpty()) {
-        *error = QStringLiteral("Nothing to rename");
+        *error = tr("Nothing to rename");
         return false;
     }
 
@@ -276,7 +278,7 @@ bool FileOperationWorker::doBatchRename(const FileOperationRequest &request,
 {
     const int count = request.sources.size();
     if (count == 0 || request.names.size() != count) {
-        *error = QStringLiteral("Nothing to rename");
+        *error = tr("Nothing to rename");
         return false;
     }
 
@@ -324,7 +326,7 @@ bool FileOperationWorker::doBatchRename(const FileOperationRequest &request,
 
     const auto renameTo = [&](int i, const QString &newName) -> bool {
         if (g_cancellable_is_cancelled(m_cancellable)) {
-            *error = QStringLiteral("Cancelled");
+            *error = tr("Cancelled");
             return false;
         }
         GFile *file = Location::make(current.at(i));
@@ -354,7 +356,7 @@ bool FileOperationWorker::doBatchRename(const FileOperationRequest &request,
                 : request.names.at(i);
             if (!renameTo(i, target)) {
                 if (!rollback())
-                    *error += QStringLiteral(" — and some earlier renames could not be undone");
+                    *error += tr(" — and some earlier renames could not be undone");
                 return false;
             }
         }
@@ -516,7 +518,7 @@ bool FileOperationWorker::doRestore(const FileOperationRequest &request,
     g_object_unref(trash);
 
     if (ok && !wanted.isEmpty()) {
-        *error = QStringLiteral("Could not find %1 in the trash").arg(wanted.first());
+        *error = tr("Could not find %1 in the trash").arg(wanted.first());
         return false;
     }
     return ok;
@@ -563,7 +565,7 @@ bool FileOperationWorker::doEmptyTrash(const FileOperationRequest &request,
 bool FileOperationWorker::deleteRecursively(GFile *file, QString *error)
 {
     if (g_cancellable_is_cancelled(m_cancellable)) {
-        *error = QStringLiteral("Cancelled");
+        *error = tr("Cancelled");
         return false;
     }
 
@@ -632,7 +634,7 @@ bool FileOperationWorker::doRemoveCreatedFolder(const FileOperationRequest &requ
 
         if (!ok) {
             *error = notEmpty
-                ? QStringLiteral("“%1” is no longer empty, so it was left alone")
+                ? tr("“%1” is no longer empty, so it was left alone")
                       .arg(QFileInfo(path).fileName())
                 : messageOf(gerror, "Could not remove folder");
             g_clear_error(&gerror);
@@ -649,7 +651,7 @@ bool FileOperationWorker::buildPlan(GFile *source, GFile *destination, ConflictP
                                     QStringList *skipped, QString *error)
 {
     if (g_cancellable_is_cancelled(m_cancellable)) {
-        *error = QStringLiteral("Cancelled");
+        *error = tr("Cancelled");
         return false;
     }
 
@@ -680,7 +682,7 @@ bool FileOperationWorker::buildPlan(GFile *source, GFile *destination, ConflictP
                 if (parent)
                     g_object_unref(parent);
                 if (!unique) {
-                    *error = QStringLiteral("Could not find a free name");
+                    *error = tr("Could not find a free name");
                     g_object_unref(target);
                     return false;
                 }
@@ -776,7 +778,7 @@ bool FileOperationWorker::doTransfer(const FileOperationRequest &request, bool r
         }
 
         if (destination && g_file_has_prefix(destination, source)) {
-            *error = QStringLiteral("Cannot put “%1” inside itself").arg(name);
+            *error = tr("Cannot put “%1” inside itself").arg(name);
             g_object_unref(destination);
             g_object_unref(source);
             ok = false;
@@ -784,7 +786,7 @@ bool FileOperationWorker::doTransfer(const FileOperationRequest &request, bool r
         }
 
         if (!destination) {
-            *error = QStringLiteral("Could not find a free name for “%1”").arg(name);
+            *error = tr("Could not find a free name for “%1”").arg(name);
             g_object_unref(source);
             ok = false;
             break;
@@ -821,7 +823,7 @@ bool FileOperationWorker::doTransfer(const FileOperationRequest &request, bool r
             }
 
             if (!crossDevice && !wouldClobber) {
-                *error = QStringLiteral("Could not move “%1”").arg(name);
+                *error = tr("Could not move “%1”").arg(name);
                 g_object_unref(destination);
                 g_object_unref(source);
                 ok = false;
@@ -868,7 +870,7 @@ bool FileOperationWorker::doTransfer(const FileOperationRequest &request, bool r
 
     for (const PlanItem &item : plan) {
         if (g_cancellable_is_cancelled(m_cancellable)) {
-            *error = QStringLiteral("Cancelled");
+            *error = tr("Cancelled");
             cleanup();
             return false;
         }

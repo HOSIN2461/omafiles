@@ -39,6 +39,23 @@ Rectangle {
             places.addBookmark(location);
     }
 
+    // The fixed places rows carry English labels from PlacesModel; translate
+    // them for display, keyed on the well-known location so bookmarks and
+    // devices (whose names come from the backend) are left untouched.
+    function displayedName(location, name) {
+        switch (location) {
+        case "recent:///": return qsTr("Recent");
+        case "starred:///": return qsTr("Starred");
+        case "network:///": return qsTr("Network");
+        case "trash:///": return qsTr("Trash");
+        }
+        if (location === homePath)
+            return qsTr("Home");
+        return name;
+    }
+
+    readonly property string homePath: Platform.homePath()
+
     implicitWidth: 200
     color: Colors.chrome
 
@@ -104,6 +121,7 @@ Rectangle {
             required property bool ejectable
 
             readonly property bool current: location !== "" && location === root.currentLocation
+            readonly property string displayedName: root.displayedName(location, name)
             // Recent is read-only and Network is not a folder; everywhere
             // else with a location can take a drop — dropping on Starred
             // stars, on Trash trashes, elsewhere transfers (Nautilus's rules).
@@ -151,7 +169,7 @@ Rectangle {
                 anchors.right: ejectButton.visible ? ejectButton.left : parent.right
                 anchors.rightMargin: 6
                 anchors.verticalCenter: parent.verticalCenter
-                text: row.name
+                text: row.displayedName
                 color: row.current ? Colors.selectionText : row.mountable ? Colors.textDim : Colors.text
                 font.pixelSize: 13
                 elide: Text.ElideRight

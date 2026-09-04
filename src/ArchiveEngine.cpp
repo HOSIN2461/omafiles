@@ -1,5 +1,6 @@
 #include "ArchiveEngine.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
@@ -39,7 +40,7 @@ bool collectSources(const QStringList &paths, QList<Source> &sources, qint64 *to
     for (const QString &path : paths) {
         const QFileInfo info(path);
         if (!info.exists() && !info.isSymLink()) {
-            *error = QStringLiteral("“%1” does not exist").arg(info.fileName());
+            *error = QCoreApplication::translate("ArchiveEngine", "“%1” does not exist").arg(info.fileName());
             return false;
         }
         sources.append({ info.absoluteFilePath(), info.fileName() });
@@ -71,7 +72,7 @@ bool writeEntry(struct archive *writer, const Source &source, QString *error,
     // whatever it currently points to.
     struct stat st;
     if (lstat(source.absolute.toLocal8Bit().constData(), &st) != 0) {
-        *error = QStringLiteral("Could not read “%1”").arg(source.relative);
+        *error = QCoreApplication::translate("ArchiveEngine", "Could not read “%1”").arg(source.relative);
         return false;
     }
 
@@ -110,7 +111,7 @@ bool writeEntry(struct archive *writer, const Source &source, QString *error,
         char buffer[128 * 1024];
         while (true) {
             if (cancelled()) {
-                *error = QStringLiteral("Cancelled");
+                *error = QCoreApplication::translate("ArchiveEngine", "Cancelled");
                 archive_entry_free(entry);
                 return false;
             }
@@ -213,13 +214,13 @@ bool compress(const QStringList &sources, const QString &archivePath, QString *e
               const QString &password)
 {
     if (sources.isEmpty()) {
-        *error = QStringLiteral("Nothing to compress");
+        *error = QCoreApplication::translate("ArchiveEngine", "Nothing to compress");
         return false;
     }
     if (QFileInfo::exists(archivePath)) {
         // The dialog validates first, so reaching this means a race — refuse
         // rather than clobber whatever appeared.
-        *error = QStringLiteral("“%1” already exists").arg(QFileInfo(archivePath).fileName());
+        *error = QCoreApplication::translate("ArchiveEngine", "“%1” already exists").arg(QFileInfo(archivePath).fileName());
         return false;
     }
 
@@ -233,7 +234,7 @@ bool compress(const QStringList &sources, const QString &archivePath, QString *e
     } else if (archivePath.endsWith(QStringLiteral(".7z"), Qt::CaseInsensitive)) {
         formatOk = archive_write_set_format_7zip(writer) == ARCHIVE_OK;
     } else {
-        *error = QStringLiteral("Unsupported archive format");
+        *error = QCoreApplication::translate("ArchiveEngine", "Unsupported archive format");
         archive_write_free(writer);
         return false;
     }
@@ -248,7 +249,7 @@ bool compress(const QStringList &sources, const QString &archivePath, QString *e
     // accepts a passphrase here; the dialog only offers it for zip.
     if (!password.isEmpty()) {
         if (!archivePath.endsWith(QStringLiteral(".zip"), Qt::CaseInsensitive)) {
-            *error = QStringLiteral("Only zip archives can be encrypted");
+            *error = QCoreApplication::translate("ArchiveEngine", "Only zip archives can be encrypted");
             archive_write_free(writer);
             return false;
         }
@@ -341,7 +342,7 @@ bool extract(const QString &archivePath, const QString &destinationDir, QString 
     const QString staging = QDir(destinationDir)
         .filePath(QStringLiteral(".omafiles-extract-%1").arg(quintptr(reader), 0, 16));
     if (!QDir().mkpath(staging)) {
-        *error = QStringLiteral("Could not write to “%1”")
+        *error = QCoreApplication::translate("ArchiveEngine", "Could not write to “%1”")
             .arg(QFileInfo(destinationDir).fileName());
         archive_read_free(reader);
         return false;
@@ -364,7 +365,7 @@ bool extract(const QString &archivePath, const QString &destinationDir, QString 
 
     while (true) {
         if (cancelled())
-            return bail(QStringLiteral("Cancelled"));
+            return bail(QCoreApplication::translate("ArchiveEngine", "Cancelled"));
 
         struct archive_entry *entry = nullptr;
         const int status = archive_read_next_header(reader, &entry);
@@ -378,7 +379,7 @@ bool extract(const QString &archivePath, const QString &destinationDir, QString 
         // the archive's stem: notes.txt.gz extracts to notes.txt.
         QString path = rawSingle ? stem : QString::fromUtf8(rawPath ? rawPath : "");
         if (!safeEntryPath(path))
-            return bail(QStringLiteral("The archive contains an unsafe path — refusing"));
+            return bail(QCoreApplication::translate("ArchiveEngine", "The archive contains an unsafe path — refusing"));
         archive_entry_set_pathname(
             entry, QDir(staging).filePath(QDir::cleanPath(path)).toUtf8().constData());
 
@@ -402,7 +403,7 @@ bool extract(const QString &archivePath, const QString &destinationDir, QString 
         QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
     if (topLevel.isEmpty()) {
         QDir(staging).removeRecursively();
-        *error = QStringLiteral("The archive is empty");
+        *error = QCoreApplication::translate("ArchiveEngine", "The archive is empty");
         return false;
     }
 
@@ -415,7 +416,7 @@ bool extract(const QString &archivePath, const QString &destinationDir, QString 
         finalPath = QDir(destinationDir).filePath(name);
         if (!QFile::rename(topLevel.first().absoluteFilePath(), finalPath)) {
             QDir(staging).removeRecursively();
-            *error = QStringLiteral("Could not move the extracted files into place");
+            *error = QCoreApplication::translate("ArchiveEngine", "Could not move the extracted files into place");
             return false;
         }
     } else {

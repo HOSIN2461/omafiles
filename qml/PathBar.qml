@@ -115,7 +115,7 @@ FocusScope {
                             textFormat: Text.PlainText
                             id: crumbLabel
                             anchors.centerIn: parent
-                            text: modelData.label
+                            text: modelData.label === "Home" ? qsTr("Home") : modelData.label
                             // The Repeater already knows how many crumbs there
                             // are; asking Platform again would re-walk the whole
                             // path once per crumb, on every re-evaluation.

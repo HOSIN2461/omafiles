@@ -99,7 +99,7 @@ NetworkModel::Row NetworkModel::serverRow(const QString &uri)
     row.entry.name = uri;
     row.entry.isDir = true;
     row.entry.contentType = QStringLiteral("inode/directory");
-    row.entry.typeDescription = QStringLiteral("Server");
+    row.entry.typeDescription = tr("Server");
     row.entry.iconNames = { QStringLiteral("network-server"), QStringLiteral("network-workgroup") };
 
     // "share on host", Nautilus's reading of an address; a bare host stands
@@ -279,6 +279,11 @@ QVariant NetworkModel::data(const QModelIndex &index, int role) const
     case DirectoryModel::IsSymlinkRole: return row.entry.isSymlink;
     case DirectoryModel::SizeRole: return row.entry.size;
     case DirectoryModel::ModifiedRole: return row.entry.modified;
+    case DirectoryModel::CreatedRole: return row.entry.created;
+    case DirectoryModel::AccessedRole: return row.entry.accessed;
+    case DirectoryModel::OwnerRole: return row.entry.owner;
+    case DirectoryModel::GroupRole: return row.entry.group;
+    case DirectoryModel::PermissionsRole: return row.entry.permissionString();
     case DirectoryModel::ContentTypeRole: return row.entry.contentType;
     case DirectoryModel::TypeDescriptionRole: return row.entry.typeDescription;
     case DirectoryModel::IconSourceRole:
@@ -304,10 +309,16 @@ QHash<int, QByteArray> NetworkModel::roleNames() const
         { DirectoryModel::IsSymlinkRole, "isSymlink" },
         { DirectoryModel::SizeRole, "size" },
         { DirectoryModel::ModifiedRole, "modified" },
+        { DirectoryModel::CreatedRole, "created" },
+        { DirectoryModel::AccessedRole, "accessed" },
+        { DirectoryModel::OwnerRole, "owner" },
+        { DirectoryModel::GroupRole, "group" },
+        { DirectoryModel::PermissionsRole, "permissions" },
         { DirectoryModel::ContentTypeRole, "contentType" },
         { DirectoryModel::TypeDescriptionRole, "typeDescription" },
         { DirectoryModel::IconSourceRole, "iconSource" },
         { DirectoryModel::OrigPathRole, "origPath" },
+        { DirectoryModel::TargetPathRole, "targetPath" },
         { DirectoryModel::ItemCountRole, "itemCount" },
         { DirectoryModel::ItemCountAllRole, "itemCountAll" },
         { DirectoryModel::DepthRole, "depth" },

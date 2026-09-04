@@ -115,7 +115,7 @@ Window {
     // a translucent base under translucent chrome would stack the
     // backgroundOpacity alpha twice in the chrome areas.
     color: "transparent"
-    title: currentTab ? currentTab.title + " — Files" : "Files"
+    title: currentTab ? currentTab.title + " — " + qsTr("Files") : qsTr("Files")
 
     // Quick Controls (menus, dialogs, fields, scrollbars) paint from the
     // palette. Without this they wear the style's stock grey and look like
