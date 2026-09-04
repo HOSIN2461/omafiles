@@ -1780,7 +1780,8 @@ Window {
         Menu {
             id: clipboardMenu
             title: qsTr("Clipboard")
-            visible: root.currentTab && root.currentTab.selectionCount > 0
+            visible: (root.currentTab && root.currentTab.selectionCount > 0)
+                     || (Clipboard.hasFiles && root.viewWritable)
             height: visible ? implicitHeight : 0
             font.pixelSize: root.fontPixelSize
 
