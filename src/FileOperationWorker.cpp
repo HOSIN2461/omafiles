@@ -428,32 +428,33 @@ bool FileOperationWorker::doTrash(const FileOperationRequest &request,
                                   FileOperationResult &result, QString *error)
 {
     for (const QString &path : request.sources) {
+        const QString name = QDir(path).dirName();
         GFile *file = Location::make(path);
         GError *gerror = nullptr;
-        bool ok = g_file_trash(file, m_cancellable, &gerror);
 
-        // Nautilus fallback: if g_file_trash() fails (e.g. on .trash-1000 in
-        // a non-native filesystem), move the file into trash:/// manually.
-        if (!ok) {
-            g_clear_error(&gerror);
-            GFile *trash = g_file_new_for_uri("trash:///");
-            GFile *dest = g_file_get_child(trash, QDir(path).dirName().toUtf8().constData());
-            GError *moveError = nullptr;
-            ok = g_file_move(file, dest, G_FILE_COPY_NONE, m_cancellable,
-                             nullptr, nullptr, &moveError);
-            if (!ok) {
-                *error = messageOf(moveError, "Could not move to trash");
-                g_clear_error(&moveError);
-            }
-            g_object_unref(dest);
-            g_object_unref(trash);
+        // A .trash* directory is a trash directory itself (FAT/exFAT export of
+        // the FreeDesktop trash). It cannot be moved into trash:/// — the trash
+        // backend refuses whole directories. The user asked for a permanent
+        // delete, which is exactly what emptying such a trash folder means.
+        if (name.startsWith(".trash")) {
+            const bool ok = deleteRecursively(file, error);
+            g_object_unref(file);
+            if (!ok)
+                return false;
+            result.sources << path;
+            continue;
         }
 
+        if (g_file_trash(file, m_cancellable, &gerror)) {
+            g_object_unref(file);
+            g_clear_error(&gerror);
+            result.sources << path;
+            continue;
+        }
+        g_clear_error(&gerror);
         g_object_unref(file);
-
-        if (!ok)
-            return false;
-        result.sources << path;
+        *error = tr("Could not move to trash");
+        return false;
     }
     return true;
 }
