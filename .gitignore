@@ -2,17 +2,15 @@ build/
 build-release/
 *.user
 
-# Local development files — tracked on the local dev branch only
-NOTES.md
-verify-phase1.sh
-verify-ui.sh
-verify-mouse.sh
-tools/
-spike/
-
 # Build artifacts
 packaging/omafiles/
 packaging/src/
 packaging/pkg/
 packaging/*.pkg.tar.zst
-build/
+
+# Development only (not needed for package build)
+bin/
+docs/
+tests/
+translations/hu.ts
+translations/omafiles_hu.qm

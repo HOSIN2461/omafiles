@@ -131,14 +131,8 @@ target_link_libraries(omafiles PRIVATE
 # --- Hungarian translation (pre-compiled .qm shipped in-tree, no LinguistTools needed) ---
 qt_add_resources(omafiles "translations"
     PREFIX "/translations"
-    FILES translations/omafiles_hu.qm
+    FILES translations/hu.qm
 )
-
-option(OMAFILES_BUILD_TESTS "Build the model test suite" ON)
-if(OMAFILES_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
-    enable_testing()
-    add_subdirectory(tests)
-endif()
 
 install(TARGETS omafiles RUNTIME DESTINATION bin)
 install(FILES LICENSE DESTINATION share/licenses/omafiles)

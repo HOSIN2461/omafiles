@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName(QStringLiteral("Omafiles"));
     app.setOrganizationDomain(QStringLiteral("omarchy.org"));
     app.setDesktopFileName(QStringLiteral("omafiles"));
-    app.setApplicationVersion(QStringLiteral("0.4.0"));
+    app.setApplicationVersion(QStringLiteral("0.4.1"));
 
     // --- Load translation (pre-compiled Hungarian .qm, embedded via resources) ---
     if (QLocale::system().language() == QLocale::Hungarian) {
