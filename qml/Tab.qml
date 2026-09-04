@@ -49,8 +49,10 @@ FocusScope {
         if (dirModel.loading)
             return "Loading…";
         const total = files.count;
-        const items = total === 1 ? "1 item" : total + " items";
-        return selectionCount > 0 ? items + ", " + selectionCount + " selected" : items;
+        const items = total === 1 ? qsTr("1 item") : qsTr("%1 items").arg(total);
+        return selectionCount > 0
+            ? items + qsTr(", %1 selected").arg(selectionCount)
+            : items;
     }
 
     // View state. The default follows the Settings store, which switching

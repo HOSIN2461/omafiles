@@ -495,7 +495,7 @@ Window {
                     // lines for list. "▦" was a crosshatch mess at 15px.
                     glyph: root.currentTab && root.currentTab.viewMode === "list" ? "view-grid" : ""
                     symbol: "☰"
-                    tip: "Switch view (Ctrl+1 / Ctrl+2)"
+                    tip: qsTr("Switch view (Ctrl+1 / Ctrl+2)")
                     onTriggered: {
                         if (root.currentTab)
                             root.setViewMode(root.currentTab.viewMode === "list" ? "icon" : "list");
