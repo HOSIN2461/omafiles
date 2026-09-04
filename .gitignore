@@ -14,4 +14,5 @@ spike/
 packaging/omafiles/
 packaging/src/
 packaging/pkg/
+packaging/*.pkg.tar.zst
 build/

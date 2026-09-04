@@ -215,7 +215,7 @@ Window {
                         visible: root.sidebarVisible
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignHCenter
-                        text: "Files"
+                        text: qsTr("Files")
                         color: Colors.text
                         font.pixelSize: 14
                         font.bold: true
@@ -1710,7 +1710,7 @@ Window {
         }
 
         MenuItem {
-            text: "Open"
+            text: qsTr("Open")
             enabled: root.currentTab && root.currentTab.selectionCount > 0
             onTriggered: root.currentTab.activate(root.currentTab.currentIndex)
         }
@@ -1718,7 +1718,7 @@ Window {
         MenuSeparator {}
 
         MenuItem {
-            text: "Open in Terminal"
+            text: qsTr("Open in Terminal")
             // A terminal needs a working directory; the sampled terminalDir
             // is empty when there is nowhere local to land (trash://, an
             // unresolved remote view).
@@ -1727,7 +1727,7 @@ Window {
         }
 
         MenuItem {
-            text: "Open in New Tab"
+            text: qsTr("Open in New Tab")
             enabled: root.currentTab && root.currentTab.selectionCount === 1
             onTriggered: {
                 const selected = root.currentTab.selectedPaths();
@@ -1887,12 +1887,13 @@ Window {
         MenuSeparator {}
 
         MenuItem {
-            text: root.currentTab && root.currentTab.showHidden ? "Hide Hidden Files" : "Show Hidden Files"
+            text: root.currentTab && root.currentTab.showHidden
+                  ? qsTr("Hide Hidden Files") : qsTr("Show Hidden Files")
             onTriggered: root.currentTab.showHidden = !root.currentTab.showHidden
         }
 
         MenuItem {
-            text: "Reload"
+            text: qsTr("Reload")
             onTriggered: root.currentTab.reload()
         }
 
